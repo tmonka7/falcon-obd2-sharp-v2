@@ -249,6 +249,44 @@ namespace RedlineDiagnostics.Rendering3D
             _adjacency = null;
         }
 
+        /// <summary>
+        /// Denser copy of an imported model without interior parts, used for the opaque studio renders on the
+        /// Home page (null when the mesh was not simplified; use the mesh itself then).
+        /// </summary>
+        public Mesh Detailed;
+
+        /// <summary>Copies the faces accepted by <paramref name="keep"/> into a new mesh with compacted vertices.</summary>
+        public Mesh Clone(Func<Face, bool> keep = null)
+        {
+            var m = new Mesh { UseFeatureEdges = UseFeatureEdges, FeatureAngleDegrees = FeatureAngleDegrees };
+            var map = new Dictionary<int, int>();
+            foreach (var f in Faces)
+            {
+                if (keep != null && !keep(f)) continue;
+                var idx = new int[f.Indices.Length];
+                for (int i = 0; i < idx.Length; i++)
+                {
+                    int ni;
+                    if (!map.TryGetValue(f.Indices[i], out ni)) { ni = m.AddVertex(Vertices[f.Indices[i]]); map[f.Indices[i]] = ni; }
+                    idx[i] = ni;
+                }
+                m.AddFace(f.Part, idx);
+            }
+            return m;
+        }
+
+        /// <summary>
+        /// Simplifies to <paramref name="detailFaces"/>, keeps an exterior-only copy in <see cref="Detailed"/>, then
+        /// continues down to <paramref name="targetFaces"/> for the real-time views. The expensive first pass is shared.
+        /// </summary>
+        public void DecimateWithDetail(int targetFaces, int detailFaces)
+        {
+            if (Faces.Count > detailFaces) Decimate(detailFaces);
+            var exterior = Clone(f => f.Part != MeshPart.Detail);
+            Detailed = exterior.Faces.Count > 0 ? exterior : null;
+            Decimate(targetFaces);
+        }
+
         public int AddVertex(Vec3 v)
         {
             Vertices.Add(v);

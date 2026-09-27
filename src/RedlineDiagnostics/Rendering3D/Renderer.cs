@@ -44,7 +44,7 @@ namespace RedlineDiagnostics.Rendering3D
     /// Software 3D renderer on top of GDI+. Perspective (3D / X-Ray) or orthographic top-down (2D),
     /// painter's algorithm for translucent faces, and projection helpers for overlays.
     /// </summary>
-    public sealed class Renderer
+    public sealed partial class Renderer
     {
         private Mat4 _view;
         private float _scale, _cx, _cy;
@@ -83,7 +83,7 @@ namespace RedlineDiagnostics.Rendering3D
                 _ortho = false;
                 _view = Mat4.Translation(-cam.Target.X, -cam.Target.Y, -cam.Target.Z)
                         * Mat4.RotationY(cam.Yaw)
-                        * Mat4.RotationX(cam.Pitch)
+                        * Mat4.RotationX(-cam.Pitch) // positive pitch = camera above the ground, looking down
                         * Mat4.Translation(0, 0, cam.Distance);
                 float f = 1f / (float)Math.Tan(cam.FovDegrees * Math.PI / 360.0);
                 _scale = viewport.Height / 2f * f;

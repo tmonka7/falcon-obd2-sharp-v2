@@ -8,6 +8,9 @@ namespace RedlineDiagnostics.Rendering3D
     /// <summary>Minimal Wavefront OBJ reader (v / f records, polygons of any size, negative indices).</summary>
     public static class ObjLoader
     {
+        /// <summary>Face budget of the exterior-only copy kept for the Home page studio renders.</summary>
+        public const int DetailFaces = 40000;
+
         public static Mesh Load(string path, float targetLength = 4.85f, int targetFaces = 7000)
         {
             var mesh = new Mesh();
@@ -76,7 +79,7 @@ namespace RedlineDiagnostics.Rendering3D
             mesh.Normalize(targetLength);
             if (mesh.Faces.Count > targetFaces)
             {
-                mesh.Decimate(targetFaces);
+                mesh.DecimateWithDetail(targetFaces, DetailFaces);
                 mesh.FeatureAngleDegrees = 52f;
             }
             mesh.UseFeatureEdges = true;

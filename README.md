@@ -4,12 +4,15 @@ Full-screen (1366 × 768) OBD-II vehicle diagnostics workstation for Windows, bu
 **.NET Framework 4.7 / Windows Forms** with a self-contained software 3D renderer.
 The UI is available in **English, Japanese and Chinese** and can be switched live.
 
+![Home dashboard](docs/screenshots/home.png)
+
 ![Full System Scan](docs/screenshots/scan.png)
 
 ## Features
 
 | Area | What it does |
 | --- | --- |
+| **Home dashboard** | Welcome card with the active vehicle, adapter card (device, link, firmware, active protocol family), health score ring with per-system status from the last scan, quick actions (scan, read / clear codes, live data, service functions), recent scans, DTC lookup with popular codes. The car pictures are rendered from the loaded 3D model with an opaque studio shader (smooth Blinn-Phong, red rim and floor bounce light, 2x supersampling) on a background thread. |
 | **Full System Scan** | Walks every control module (21 modules in the bundled catalog), probes it, identifies the ECU, samples its live channels and reads stored / pending / permanent trouble codes (SAE J1979 and UDS 19 02). Progress is visualised in 3D: glowing module markers, an animated CAN harness, a scanning sweep plane and floating callouts. |
 | **3D vehicle view** | Real car meshes (glTF/GLB or OBJ) rendered with GDI+: painter's algorithm, holographic fills, crease + silhouette outlines. 3D / 2D (top-down blueprint) / X-Ray modes, mouse orbit and zoom, auto-rotate, mini navigator. Dense models are simplified at load time with quadric edge collapse (213k → 7k triangles in about 3 s). A procedural sedan is the fallback when no model is available. |
 | **Adapters** | ELM327 over USB or Bluetooth SPP (COM port), ELM327 WiFi (TCP), OBDLink MX+/SX (STN), and a built-in **Simulator** with a virtual hybrid sedan so the whole application can be exercised without hardware. |
@@ -72,18 +75,22 @@ RedlineDiagnostics.exe --autotest C:\temp\shots
 Runs an unattended session off-screen (simulator scan, language switch, view modes, report, live data,
 all pages) and writes a PNG of every step. Useful for visual regression checks.
 
+`--autotest-home <dir>` captures only the Home page in EN / JA / ZH (about 8 s), and `--render-cars <dir>` writes the
+Home page car renders (hero, rear, thumbnail, sidebar) as PNG files and exits.
+
 ## Project layout
 
 ```
 src/RedlineDiagnostics
 ├─ App/            Theme, vector icons, settings, AppState (connection, scan, vehicles, history)
 ├─ Localization/   Loc (runtime language switch) and the EN/JA/ZH string table
-├─ Rendering3D/    Vec3/Mat4 math, Mesh, procedural CarMeshFactory, ObjLoader, GDI+ Renderer
+├─ Rendering3D/    Vec3/Mat4 math, Mesh, procedural CarMeshFactory, OBJ / glTF loaders, QEM simplifier,
+│                  GDI+ Renderer (holographic views) and StudioRenderer (opaque lit stills)
 ├─ Obd/            Transports (Serial/TCP/Simulator), Elm327Adapter, ISO-TP response parser,
 │                  PID formulas, DTC parsers, ELM327 + virtual vehicle simulator
 ├─ Database/       Embedded CSV loaders (DTC, PID, module catalog, VIN WMI) + Data/*.csv
 ├─ Diagnostics/    ScanEngine, LiveDataMonitor, LiveParam channel definitions, history, HTML reports
-├─ Controls/       Custom-painted widgets: TopBar, SideNav, Vehicle3DView, module cards,
+├─ Controls/       Custom-painted widgets: TopBar, SideNav, Vehicle3DView, CarImages (cached car renders), module cards,
 │                  diagnostic area panel, buttons, lists, sparklines
 └─ Forms/          MainForm shell and the eight pages
 ```
@@ -101,7 +108,8 @@ with **Custom file…**. Loading runs on a background thread; the procedural car
 
 Import pipeline: node hierarchy and transforms → triangles → part classification from node / mesh / material
 names (`glass`, `wheel`, `interior`, …) → normalisation to a 4.85 m wheelbase footprint resting on the ground →
-quadric-error-metric simplification with boundary preservation → crease detection. Small trim parts (wipers,
+quadric-error-metric simplification with boundary preservation (a 40k-face exterior-only copy is kept for the Home page
+renders, the 3D views use 7k faces) → crease detection. Small trim parts (wipers,
 gaskets, pedals, badges) are skipped because they only add noise at this scale.
 
 ## Extending

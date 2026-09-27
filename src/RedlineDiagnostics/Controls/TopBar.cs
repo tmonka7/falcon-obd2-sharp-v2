@@ -19,6 +19,8 @@ namespace RedlineDiagnostics.Controls
         public string Title { get; set; } = "";
         public string Subtitle { get; set; } = "";
         public bool ShowBack { get; set; }
+        /// <summary>Home page: show the brand tagline instead of a page title.</summary>
+        public bool ShowTagline { get; set; }
 
         public event Action BackClicked;
         public event Action ConnectClicked;
@@ -88,10 +90,18 @@ namespace RedlineDiagnostics.Controls
                 x += 30;
             }
             else _backRect = RectangleF.Empty;
-            using (var f = F(13f, true))
-                Theme.DrawText(g, Title, f, Theme.Text, new Point((int)x, 7));
-            using (var f = F(8.5f))
-                Theme.DrawText(g, Subtitle, f, Theme.TextMuted, new Point((int)x, 32));
+            if (ShowTagline)
+            {
+                using (var f = Theme.Font(9.5f, FontStyle.Italic))
+                    Theme.DrawText(g, Loc.T("app.tagline"), f, Theme.TextMuted, new Rectangle((int)x + 8, 0, 460, Height), TextFormatFlags.Left | TextFormatFlags.VerticalCenter);
+            }
+            else
+            {
+                using (var f = F(13f, true))
+                    Theme.DrawText(g, Title, f, Theme.Text, new Point((int)x, 7));
+                using (var f = F(8.5f))
+                    Theme.DrawText(g, Subtitle, f, Theme.TextMuted, new Point((int)x, 32));
+            }
 
             // ---- right side ----
             float rx = Width - 18;
@@ -102,15 +112,21 @@ namespace RedlineDiagnostics.Controls
             Icons.Draw(g, "bluetooth", new RectangleF(rx - 14, 19, 14, 18), st.Settings.Adapter == Obd.AdapterType.Elm327Bluetooth || st.Settings.Adapter == Obd.AdapterType.ObdLink ? Theme.Cyan : Theme.Text, 1.4f); rx -= 20;
             Icons.Draw(g, "wifi", new RectangleF(rx - 18, 19, 18, 18), st.Settings.Adapter == Obd.AdapterType.Elm327WiFi ? Theme.Cyan : Theme.Text, 1.4f); rx -= 30;
 
-            // clock
+            // clock + date
             using (var f = F(11f, true))
+            using (var fd = F(7.5f))
             {
-                var t = DateTime.Now.ToString("HH:mm");
+                var now = DateTime.Now;
+                var t = now.ToString("HH:mm");
+                var d = Loc.Current == Language.EN ? now.ToString("MMM d, yyyy", System.Globalization.CultureInfo.InvariantCulture) : now.ToString("yyyy/MM/dd");
                 var sz = Theme.Measure(t, f);
-                rx -= sz.Width;
-                Theme.DrawText(g, t, f, Theme.Text, new Point((int)rx, 18));
+                var szd = Theme.Measure(d, fd);
+                float w = Math.Max(sz.Width, szd.Width);
+                rx -= w;
+                Theme.DrawText(g, t, f, Theme.Text, new Point((int)rx, 9));
+                Theme.DrawText(g, d, fd, Theme.TextMuted, new Point((int)rx, 32));
             }
-            rx -= 24;
+            rx -= 22;
 
             // language segmented control
             string[] labels = { "EN", "日本語", "中文" };

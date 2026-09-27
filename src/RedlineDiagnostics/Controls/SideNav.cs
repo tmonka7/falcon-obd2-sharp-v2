@@ -24,6 +24,7 @@ namespace RedlineDiagnostics.Controls
         {
             Width = 160;
             BackColor = Theme.Sidebar;
+            CarImages.Changed += Invalidate;
         }
 
         public int SelectedIndex
@@ -91,6 +92,32 @@ namespace RedlineDiagnostics.Controls
                         g.DrawLine(pen, 16, r.Bottom - 1, Width - 16, r.Bottom - 1);
                 }
             }
+            PaintFooter(g);
+        }
+
+        /// <summary>Red-lit car and slogan in the free space under the menu.</summary>
+        private void PaintFooter(Graphics g)
+        {
+            int menuBottom = TopOffset + Keys.Length * ItemHeight;
+            int top = Height - 168;
+            if (top < menuBottom + 6) return;
+            using (var gp = new GraphicsPath())
+            {
+                gp.AddEllipse(-60, top + 10, Width + 60, 150);
+                using (var pb = new PathGradientBrush(gp) { CenterColor = Theme.WithAlpha(Theme.Red, 70), SurroundColors = new[] { Theme.WithAlpha(Theme.Red, 0) } })
+                    g.FillPath(pb, gp);
+            }
+            var img = CarImages.Get(CarShot.Nav, new Size(148, 76));
+            if (img != null) g.DrawImage(img, 4, top, 148, 76);
+            using (var f = F(9.5f))
+            {
+                var lines = Loc.T("home.sideSlogan").Split('\n');
+                for (int i = 0; i < lines.Length; i++)
+                    Theme.DrawText(g, lines[i], f, Theme.Text, new Point(18, top + 92 + i * 19));
+            }
+            var bar = new RectangleF(18, Height - 24, 68, 3);
+            using (var b = new LinearGradientBrush(new RectangleF(bar.X - 1, bar.Y, bar.Width + 2, bar.Height), Theme.RedBright, Theme.WithAlpha(Theme.Red, 60), LinearGradientMode.Horizontal))
+                g.FillRectangle(b, bar);
         }
     }
 }

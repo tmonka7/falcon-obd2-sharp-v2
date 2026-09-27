@@ -13,6 +13,9 @@ namespace RedlineDiagnostics.Rendering3D
     /// </summary>
     public static class GltfLoader
     {
+        /// <summary>Face budget of the exterior-only copy kept for the Home page studio renders.</summary>
+        public const int DetailFaces = 40000;
+
         private const uint GlbMagic = 0x46546C67;   // "glTF"
         private const uint ChunkJson = 0x4E4F534A;  // "JSON"
         private const uint ChunkBin = 0x004E4942;   // "BIN\0"
@@ -88,7 +91,7 @@ namespace RedlineDiagnostics.Rendering3D
             mesh.Normalize(targetLength);
             if (mesh.Faces.Count > targetFaces)
             {
-                mesh.Decimate(targetFaces);
+                mesh.DecimateWithDetail(targetFaces, DetailFaces);
                 mesh.FeatureAngleDegrees = 52f;
             }
             mesh.UseFeatureEdges = true;

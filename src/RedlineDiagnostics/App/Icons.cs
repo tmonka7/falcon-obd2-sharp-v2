@@ -305,6 +305,72 @@ namespace RedlineDiagnostics.App
                         g.DrawRectangle(pen, x + w * .32f, y + h * .15f, w * .36f, h * .22f);
                         g.DrawRectangle(pen, x + w * .28f, y + h * .55f, w * .44f, h * .3f);
                         break;
+                    case "bolt":
+                        g.FillPolygon(brush, new[] { P(x + w * .58f, y + h * .05f), P(x + w * .22f, y + h * .55f), P(x + w * .48f, y + h * .55f), P(x + w * .4f, y + h * .95f), P(x + w * .78f, y + h * .42f), P(x + w * .52f, y + h * .42f) });
+                        break;
+                    case "shield":
+                        g.DrawLines(pen, new[] { P(x + w * .5f, y + h * .08f), P(x + w * .85f, y + h * .22f), P(x + w * .82f, y + h * .55f), P(x + w * .5f, y + h * .92f), P(x + w * .18f, y + h * .55f), P(x + w * .15f, y + h * .22f), P(x + w * .5f, y + h * .08f) });
+                        g.DrawLines(pen, new[] { P(x + w * .35f, y + h * .5f), P(x + w * .46f, y + h * .62f), P(x + w * .66f, y + h * .38f) });
+                        break;
+                    case "wrench":
+                        g.DrawLine(pen, x + w * .22f, y + h * .78f, x + w * .6f, y + h * .4f);
+                        g.DrawArc(pen, x + w * .5f, y + h * .1f, w * .38f, h * .38f, 110, 250);
+                        g.FillEllipse(brush, x + w * .12f, y + h * .68f, w * .2f, h * .2f);
+                        break;
+                    case "search":
+                        g.DrawEllipse(pen, x + w * .12f, y + h * .12f, w * .55f, h * .55f);
+                        g.DrawLine(pen, x + w * .62f, y + h * .62f, x + w * .9f, y + h * .9f);
+                        break;
+                    case "globe":
+                        g.DrawEllipse(pen, x + w * .12f, y + h * .12f, w * .76f, h * .76f);
+                        g.DrawEllipse(pen, x + w * .34f, y + h * .12f, w * .32f, h * .76f);
+                        g.DrawLine(pen, x + w * .12f, y + h * .5f, x + w * .88f, y + h * .5f);
+                        break;
+                    case "heart":
+                        {
+                            using (var path = new GraphicsPath())
+                            {
+                                path.AddBezier(P(x + w * .5f, y + h * .9f), P(x + w * .02f, y + h * .55f), P(x + w * .08f, y + h * .08f), P(x + w * .5f, y + h * .28f));
+                                path.AddBezier(P(x + w * .5f, y + h * .28f), P(x + w * .92f, y + h * .08f), P(x + w * .98f, y + h * .55f), P(x + w * .5f, y + h * .9f));
+                                g.DrawPath(pen, path);
+                            }
+                            g.DrawLines(pen, new[] { P(x + w * .24f, y + h * .52f), P(x + w * .4f, y + h * .52f), P(x + w * .47f, y + h * .38f), P(x + w * .55f, y + h * .66f), P(x + w * .61f, y + h * .52f), P(x + w * .76f, y + h * .52f) });
+                        }
+                        break;
+                    case "filesearch":
+                        g.DrawLines(pen, new[] { P(x + w * .6f, y + h * .1f), P(x + w * .2f, y + h * .1f), P(x + w * .2f, y + h * .9f), P(x + w * .8f, y + h * .9f), P(x + w * .8f, y + h * .3f), P(x + w * .6f, y + h * .1f), P(x + w * .6f, y + h * .3f), P(x + w * .8f, y + h * .3f) });
+                        g.DrawEllipse(pen, x + w * .36f, y + h * .42f, w * .24f, h * .24f);
+                        g.DrawLine(pen, x + w * .56f, y + h * .62f, x + w * .68f, y + h * .76f);
+                        break;
+                    case "clock":
+                        g.DrawEllipse(pen, x + w * .1f, y + h * .1f, w * .8f, h * .8f);
+                        g.DrawLines(pen, new[] { P(x + w * .5f, y + h * .28f), P(x + w * .5f, y + h * .52f), P(x + w * .68f, y + h * .62f) });
+                        break;
+                    case "alert":
+                        g.DrawEllipse(pen, x + w * .1f, y + h * .1f, w * .8f, h * .8f);
+                        g.DrawLine(pen, x + w * .5f, y + h * .3f, x + w * .5f, y + h * .56f);
+                        g.FillEllipse(brush, x + w * .44f, y + h * .66f, w * .12f, h * .12f);
+                        break;
+                    case "chip":
+                        g.DrawRectangle(pen, x + w * .25f, y + h * .25f, w * .5f, h * .5f);
+                        for (int k = 0; k < 3; k++)
+                        {
+                            float o = .35f + k * .15f;
+                            g.DrawLine(pen, x + w * o, y + h * .08f, x + w * o, y + h * .25f);
+                            g.DrawLine(pen, x + w * o, y + h * .75f, x + w * o, y + h * .92f);
+                            g.DrawLine(pen, x + w * .08f, y + h * o, x + w * .25f, y + h * o);
+                            g.DrawLine(pen, x + w * .75f, y + h * o, x + w * .92f, y + h * o);
+                        }
+                        break;
+                    case "dots":
+                        for (int k = 0; k < 3; k++) g.FillEllipse(brush, x + w * .42f, y + h * (.15f + k * .3f), w * .16f, h * .14f);
+                        break;
+                    case "target2":
+                        g.DrawEllipse(pen, x + w * .1f, y + h * .1f, w * .8f, h * .8f);
+                        g.DrawEllipse(pen, x + w * .3f, y + h * .3f, w * .4f, h * .4f);
+                        g.FillEllipse(brush, x + w * .44f, y + h * .44f, w * .12f, h * .12f);
+                        g.DrawLine(pen, x + w * .5f, y + h * .5f, x + w * .92f, y + h * .08f);
+                        break;
                     default:
                         g.DrawEllipse(pen, x + w * .2f, y + h * .2f, w * .6f, h * .6f);
                         break;

@@ -83,6 +83,9 @@ namespace RedlineDiagnostics.Forms
         /// <summary>When set, the form runs an unattended scripted session off-screen and writes PNG captures here.</summary>
         public string AutoTestDir { get; set; }
 
+        /// <summary>With <see cref="AutoTestDir"/>: capture only the Home page (EN / JA / ZH) and exit.</summary>
+        public bool AutoTestQuick { get; set; }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -132,6 +135,19 @@ namespace RedlineDiagnostics.Forms
             };
 
             var diag = (DiagnosePage)_pages[1];
+            if (AutoTestQuick)
+            {
+                at(4000, () => shot("home_en"));
+                at(4200, () => { Loc.Current = Language.JA; });
+                at(5200, () => shot("home_ja"));
+                at(5400, () => { Loc.Current = Language.ZH; });
+                at(6400, () => shot("home_zh"));
+                at(6600, () => { Loc.Current = Language.EN; ShowPage(1); });
+                at(7400, () => shot("diagnose"));
+                at(7600, () => Close());
+            }
+            else
+            {
             at(4000, () => shot("01_home"));
             at(4500, () => { ShowPage(1); diag.StartScanIfPossible(); });
             at(12000, () => shot("02_scan"));
@@ -158,6 +174,7 @@ namespace RedlineDiagnostics.Forms
             at(71500, () => { ShowPage(3); ((VehiclePage)_pages[3]).ReadFromEcu(); });
             at(75000, () => shot("14_vehicle"));
             at(76000, () => Close());
+            }
 
             var timer = new System.Windows.Forms.Timer { Interval = 100 };
             var started = DateTime.Now;
@@ -239,6 +256,7 @@ namespace RedlineDiagnostics.Forms
             _topBar.Title = Loc.T(page.TitleKey);
             _topBar.Subtitle = page.Subtitle;
             _topBar.ShowBack = _current != 0;
+            _topBar.ShowTagline = _current == 0;
             _topBar.Invalidate();
         }
 
