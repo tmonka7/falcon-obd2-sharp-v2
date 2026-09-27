@@ -25,6 +25,15 @@ namespace RedlineDiagnostics.Controls
             using (var b = new SolidBrush(BackColor)) e.Graphics.FillRectangle(b, ClientRectangle);
         }
 
+        /// <summary>True for controls that handle pinch zoom (WM_GESTURE); all others get plain finger drags.</summary>
+        protected virtual bool AllowPinchZoom => false;
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            Touch.Configure(Handle, AllowPinchZoom);
+        }
+
         public void ApplyLocalization()
         {
             OnLocalize();
@@ -65,7 +74,13 @@ namespace RedlineDiagnostics.Controls
         protected override void OnMouseEnter(EventArgs e) { _hover = true; Invalidate(); base.OnMouseEnter(e); }
         protected override void OnMouseLeave(EventArgs e) { _hover = false; _down = false; Invalidate(); base.OnMouseLeave(e); }
         protected override void OnMouseDown(MouseEventArgs e) { _down = true; Invalidate(); base.OnMouseDown(e); }
-        protected override void OnMouseUp(MouseEventArgs e) { _down = false; Invalidate(); base.OnMouseUp(e); }
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            _down = false;
+            if (Touch.IsTouchMessage()) _hover = false; // a finger never "leaves", so drop the hover look after a tap
+            Invalidate();
+            base.OnMouseUp(e);
+        }
         protected override void OnEnabledChanged(EventArgs e) { Invalidate(); base.OnEnabledChanged(e); }
         protected override void OnTextChanged(EventArgs e) { Invalidate(); base.OnTextChanged(e); }
 
@@ -239,57 +254,85 @@ namespace RedlineDiagnostics.Controls
         }
     }
 
-    /// <summary>Two-column label/value list.</summary>
+    /// <summary>Two-column label/value list; drag or wheel scrolls when the rows do not fit.</summary>
     public sealed class KeyValueList : BaseControl
     {
         private readonly List<KeyValueRow> _rows = new List<KeyValueRow>();
+        private readonly TouchScroller _scroller;
         public int RowHeight { get; set; } = 26;
         public bool Separators { get; set; } = true;
         public float FontSize { get; set; } = 9f;
         public bool ValueBold { get; set; }
 
+        public KeyValueList()
+        {
+            _scroller = new TouchScroller(this) { Max = () => Math.Max(0, _rows.Count * RowHeight - Height) };
+            _scroller.Scrolled += Invalidate;
+        }
+
         public void SetRows(IEnumerable<KeyValueRow> rows)
         {
             _rows.Clear();
             if (rows != null) _rows.AddRange(rows);
+            _scroller.Clamp();
             Invalidate();
         }
 
         public int PreferredHeight => _rows.Count * RowHeight;
 
+        protected override void OnMouseDown(MouseEventArgs e) { if (e.Button == MouseButtons.Left) _scroller.MouseDown(e.Location); base.OnMouseDown(e); }
+        protected override void OnMouseMove(MouseEventArgs e) { _scroller.MouseMove(e.Location); base.OnMouseMove(e); }
+        protected override void OnMouseUp(MouseEventArgs e) { _scroller.MouseUp(); base.OnMouseUp(e); }
+        protected override void OnMouseWheel(MouseEventArgs e) { _scroller.Wheel(e.Delta, RowHeight); base.OnMouseWheel(e); }
+        protected override void OnResize(EventArgs e) { base.OnResize(e); _scroller?.Clamp(); }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _scroller.Dispose();
+            base.Dispose(disposing);
+        }
+
         protected override void OnPaint(PaintEventArgs e)
         {
             var g = e.Graphics;
             Theme.Setup(g);
+            bool scrolls = _rows.Count * RowHeight > Height;
+            int right = scrolls ? Width - 10 : Width;
             using (var fl = F(FontSize))
             using (var fv = F(FontSize, ValueBold))
             {
-                int y = 0;
+                int y = -_scroller.Offset;
                 foreach (var row in _rows)
                 {
-                    if (y + RowHeight > Height + RowHeight) break;
+                    if (y + RowHeight <= 0) { y += RowHeight; continue; }
+                    if (y > Height) break;
                     int x = 0;
                     if (row.Dot.HasValue)
                     {
                         Theme.GlowDot(g, new PointF(6, y + RowHeight / 2f), 3.5f, row.Dot.Value, 2);
                         x = 16;
                     }
-                    Theme.DrawText(g, row.Label, fl, Theme.TextMuted, new Rectangle(x, y, Width - x, RowHeight), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
-                    Theme.DrawText(g, row.Value ?? "", fv, row.ValueColor ?? Theme.Text, new Rectangle(0, y, Width, RowHeight), TextFormatFlags.Right | TextFormatFlags.VerticalCenter);
+                    Theme.DrawText(g, row.Label, fl, Theme.TextMuted, new Rectangle(x, y, right - x, RowHeight), TextFormatFlags.Left | TextFormatFlags.VerticalCenter | TextFormatFlags.EndEllipsis);
+                    Theme.DrawText(g, row.Value ?? "", fv, row.ValueColor ?? Theme.Text, new Rectangle(0, y, right, RowHeight), TextFormatFlags.Right | TextFormatFlags.VerticalCenter);
                     if (Separators)
                         using (var pen = new Pen(Theme.BorderSoft, 1f))
-                            g.DrawLine(pen, 0, y + RowHeight - 1, Width, y + RowHeight - 1);
+                            g.DrawLine(pen, 0, y + RowHeight - 1, right, y + RowHeight - 1);
                     y += RowHeight;
                 }
             }
+            _scroller.DrawIndicator(g, ClientRectangle, _rows.Count * RowHeight);
         }
     }
 
-    /// <summary>Scrollable list with owner-drawn rows.</summary>
+    /// <summary>
+    /// Scrollable list with owner-drawn rows. Drag (finger or mouse) or wheel scrolls with inertia; a tap selects a row,
+    /// a tap on the selected row or a double tap activates it.
+    /// </summary>
     public sealed class ItemList : BaseControl
     {
         private readonly List<object> _items = new List<object>();
-        private int _scroll, _hover = -1, _selected = -1;
+        private readonly TouchScroller _scroller;
+        private int _hover = -1, _selected = -1, _pressed = -1;
 
         public int ItemHeight { get; set; } = 56;
         public Action<Graphics, Rectangle, object, bool, bool> DrawItem { get; set; }
@@ -300,6 +343,8 @@ namespace RedlineDiagnostics.Controls
         public ItemList()
         {
             BackColor = Theme.Surface;
+            _scroller = new TouchScroller(this) { Max = () => MaxScroll };
+            _scroller.Scrolled += Invalidate;
         }
 
         public IReadOnlyList<object> Items => _items;
@@ -322,7 +367,7 @@ namespace RedlineDiagnostics.Controls
             var sel = SelectedItem;
             _items.Clear();
             if (items != null) _items.AddRange(items);
-            _scroll = Math.Max(0, Math.Min(_scroll, MaxScroll));
+            _scroller.Clamp();
             int idx = keepSelection && sel != null ? _items.IndexOf(sel) : -1;
             if (idx < 0 && _items.Count > 0 && keepSelection) idx = 0;
             _selected = idx;
@@ -332,23 +377,39 @@ namespace RedlineDiagnostics.Controls
 
         private int MaxScroll => Math.Max(0, _items.Count * ItemHeight - Height);
 
+        protected override void OnResize(EventArgs e) { base.OnResize(e); _scroller?.Clamp(); }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _scroller.Dispose();
+            base.Dispose(disposing);
+        }
+
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            _scroll = Math.Max(0, Math.Min(MaxScroll, _scroll - Math.Sign(e.Delta) * ItemHeight));
-            Invalidate();
+            _scroller.Wheel(e.Delta, ItemHeight);
             base.OnMouseWheel(e);
         }
 
         private int HitTest(Point p)
         {
-            int idx = (p.Y + _scroll) / ItemHeight;
+            if (p.Y < 0 || p.Y >= Height) return -1;
+            int idx = (p.Y + _scroller.Offset) / ItemHeight;
             return idx >= 0 && idx < _items.Count ? idx : -1;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            int h = HitTest(e.Location);
-            if (h != _hover) { _hover = h; Invalidate(); }
+            if (_scroller.MouseMove(e.Location))
+            {
+                _pressed = -1;
+                if (_hover != -1) { _hover = -1; Invalidate(); }
+            }
+            else if (!_scroller.IsPressed)
+            {
+                int h = HitTest(e.Location);
+                if (h != _hover) { _hover = h; Invalidate(); }
+            }
             base.OnMouseMove(e);
         }
 
@@ -357,15 +418,31 @@ namespace RedlineDiagnostics.Controls
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Focus();
-            int h = HitTest(e.Location);
-            if (h >= 0) SelectedIndex = h;
+            if (e.Button == MouseButtons.Left)
+            {
+                _scroller.MouseDown(e.Location);
+                _pressed = HitTest(e.Location);
+            }
             base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            bool dragged = _scroller.MouseUp();
+            if (!dragged && e.Button == MouseButtons.Left && _pressed >= 0 && _pressed == HitTest(e.Location))
+            {
+                if (_pressed == _selected) ItemActivated?.Invoke(_items[_pressed]);
+                else SelectedIndex = _pressed;
+            }
+            _pressed = -1;
+            if (Touch.IsTouchMessage()) _hover = -1;
+            Invalidate();
+            base.OnMouseUp(e);
         }
 
         protected override void OnMouseDoubleClick(MouseEventArgs e)
         {
-            int h = HitTest(e.Location);
-            if (h >= 0) ItemActivated?.Invoke(_items[h]);
+            // The first tap selected the row and the second (a double click) already activated it in OnMouseUp.
             base.OnMouseDoubleClick(e);
         }
 
@@ -379,13 +456,14 @@ namespace RedlineDiagnostics.Controls
                     Theme.DrawText(g, EmptyTextKey != null ? Loc.T(EmptyTextKey) : "", f, Theme.TextMuted, ClientRectangle, TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.WordBreak);
                 return;
             }
-            int first = _scroll / ItemHeight;
+            int scroll = _scroller.Offset;
+            int first = scroll / ItemHeight;
             for (int i = first; i < _items.Count; i++)
             {
-                int y = i * ItemHeight - _scroll;
+                int y = i * ItemHeight - scroll;
                 if (y > Height) break;
                 var r = new Rectangle(0, y, Width - (MaxScroll > 0 ? 8 : 0), ItemHeight);
-                bool sel = i == _selected, hov = i == _hover;
+                bool sel = i == _selected, hov = i == _hover || i == _pressed;
                 if (sel) Theme.FillRounded(g, new RectangleF(r.X + 4, r.Y + 3, r.Width - 8, r.Height - 6), 8, Theme.WithAlpha(Theme.Red, 40));
                 else if (hov) Theme.FillRounded(g, new RectangleF(r.X + 4, r.Y + 3, r.Width - 8, r.Height - 6), 8, Theme.WithAlpha(Theme.Cyan, 18));
                 if (sel) Theme.DrawRounded(g, new RectangleF(r.X + 4.5f, r.Y + 3.5f, r.Width - 9, r.Height - 7), 8, Theme.WithAlpha(Theme.Red, 160));
@@ -393,13 +471,7 @@ namespace RedlineDiagnostics.Controls
                 using (var pen = new Pen(Theme.BorderSoft, 1f))
                     g.DrawLine(pen, 12, r.Bottom - 1, r.Right - 12, r.Bottom - 1);
             }
-            if (MaxScroll > 0)
-            {
-                float trackH = Height - 8;
-                float thumbH = Math.Max(24, trackH * Height / (_items.Count * ItemHeight));
-                float thumbY = 4 + (trackH - thumbH) * _scroll / MaxScroll;
-                Theme.FillRounded(g, new RectangleF(Width - 6, thumbY, 3, thumbH), 1.5f, Theme.WithAlpha(Theme.TextMuted, 120));
-            }
+            _scroller.DrawIndicator(g, ClientRectangle, _items.Count * ItemHeight);
         }
     }
 

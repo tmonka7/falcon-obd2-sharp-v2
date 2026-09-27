@@ -54,6 +54,42 @@ namespace RedlineDiagnostics.Controls
             _timer.Start();
         }
 
+        // ------------------------------------------------------------------ pinch zoom (touch)
+
+        protected override bool AllowPinchZoom => true;
+        private ulong _pinchStart;
+        private float _pinchDistance;
+
+        protected override void WndProc(ref Message m)
+        {
+            if (m.Msg == Touch.WM_GESTURE)
+            {
+                var gi = new Touch.GESTUREINFO { cbSize = System.Runtime.InteropServices.Marshal.SizeOf(typeof(Touch.GESTUREINFO)) };
+                if (Touch.GetGestureInfo(m.LParam, ref gi))
+                {
+                    if (gi.dwID == Touch.GID_ZOOM)
+                    {
+                        // ullArguments holds the distance between the two fingers.
+                        if ((gi.dwFlags & 1) != 0 || _pinchStart == 0) { _pinchStart = Math.Max(1UL, gi.ullArguments); _pinchDistance = _camera.Distance; }
+                        else
+                        {
+                            float ratio = (float)_pinchStart / Math.Max(1UL, gi.ullArguments);
+                            _camera.Distance = _pinchDistance * ratio;
+                            _camera.Clamp();
+                            _lastDrag = DateTime.Now;
+                            _dragging = false; // the first finger's press must not keep orbiting
+                            Invalidate();
+                        }
+                        if ((gi.dwFlags & 4) != 0) _pinchStart = 0; // GF_END
+                        Touch.CloseGestureInfoHandle(m.LParam);
+                        m.Result = IntPtr.Zero;
+                        return;
+                    }
+                }
+            }
+            base.WndProc(ref m);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing) _timer.Dispose();
@@ -142,7 +178,7 @@ namespace RedlineDiagnostics.Controls
         private ControlModule HitModule(Point p)
         {
             ControlModule best = null;
-            float bestD = 16f;
+            float bestD = 26f; // finger-sized hit radius
             foreach (var kv in _markerScreen)
             {
                 float dx = kv.Value.X - p.X, dy = kv.Value.Y - p.Y;

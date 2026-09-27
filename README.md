@@ -35,6 +35,13 @@ The executable has no runtime dependencies beyond .NET Framework 4.7.
 
 ## Running
 
+* **Touch**: every action works by finger. Tap selects, tapping a selected list row (or double-tapping) opens it;
+  drag scrolls any list or panel whose content does not fit (history, reports, garage, vehicle monitors and PIDs,
+  Home recent scans and DTC results, the Diagnose side panel, the module card strip, live data), with inertia.
+  Drag orbits the 3D car and pinch zooms it. Windows' pan / press-and-hold gestures are switched off for the app's
+  windows so drags reach the controls; buttons and hit areas are finger sized.
+* **Window buttons** (top right): minimize, maximize / restore, close. Maximize is full screen; restore is a
+  1366 x 768 window that can be moved by dragging the top bar (double-tap the bar to toggle).
 * **Full screen** (default): the borderless window covers the entire primary display, so the taskbar is hidden.
   The layout is a fixed 1366 × 768 canvas: it fills a 1366 × 768 screen exactly and is centred on a black
   backdrop on larger screens. `F11` switches between full screen and a 1366 × 768 window (also in

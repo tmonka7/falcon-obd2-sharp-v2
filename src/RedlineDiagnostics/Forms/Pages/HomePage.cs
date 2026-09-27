@@ -181,8 +181,79 @@ namespace RedlineDiagnostics.Forms.Pages
                 BackColor = Theme.Background;
             }
 
+            // ---- optional drag-scroll region (rows inside Viewport move by Scroller.Offset) ----
+            protected TouchScroller Scroller;
+            protected Rectangle Viewport;
+            protected int ContentHeight;
+
+            protected void EnableScrolling()
+            {
+                Scroller = new TouchScroller(this) { Max = () => Math.Max(0, ContentHeight - Viewport.Height) };
+                Scroller.Scrolled += Invalidate;
+            }
+
+            protected int ScrollOffset => Scroller?.Offset ?? 0;
+
+            /// <summary>Clips drawing to the scroll viewport; pair with <see cref="EndViewport"/>.</summary>
+            protected GraphicsState BeginViewport(Graphics g, Rectangle viewport, int contentHeight)
+            {
+                Viewport = viewport;
+                ContentHeight = contentHeight;
+                Scroller?.Clamp();
+                var state = g.Save();
+                g.SetClip(viewport);
+                return state;
+            }
+
+            protected void EndViewport(Graphics g, GraphicsState state)
+            {
+                g.Restore(state);
+                Scroller?.DrawIndicator(g, Viewport, ContentHeight);
+            }
+
+            /// <summary>True when the scroll content is taller than its viewport (rows leave room for the indicator).</summary>
+            protected bool Overflows(int contentHeight, int viewportHeight) => contentHeight > viewportHeight;
+
+            /// <summary>Registers a hot spot for a row inside the viewport, clipped so hidden parts cannot be tapped.</summary>
+            protected void AddRowHot(string id, RectangleF r, Action click)
+            {
+                var c = RectangleF.Intersect(r, Viewport);
+                if (c.Width > 0 && c.Height > 0) AddHot(id, c, click);
+            }
+
+            protected override void OnMouseDown(MouseEventArgs e)
+            {
+                if (Scroller != null && e.Button == MouseButtons.Left && Viewport.Contains(e.Location)) Scroller.MouseDown(e.Location);
+                base.OnMouseDown(e);
+            }
+
+            protected override void OnMouseUp(MouseEventArgs e)
+            {
+                Scroller?.MouseUp();
+                if (Touch.IsTouchMessage() && HoverId != null) { HoverId = null; Invalidate(); }
+                base.OnMouseUp(e);
+            }
+
+            protected override void OnMouseWheel(MouseEventArgs e)
+            {
+                Scroller?.Wheel(e.Delta, 48);
+                base.OnMouseWheel(e);
+            }
+
+            protected override void Dispose(bool disposing)
+            {
+                if (disposing) Scroller?.Dispose();
+                base.Dispose(disposing);
+            }
+
             protected override void OnMouseMove(MouseEventArgs e)
             {
+                if (Scroller != null && Scroller.MouseMove(e.Location))
+                {
+                    if (HoverId != null) { HoverId = null; Invalidate(); }
+                    base.OnMouseMove(e);
+                    return;
+                }
                 var h = _hots.LastOrDefault(x => x.Rect.Contains(e.Location));
                 var id = h?.Id;
                 if (id != HoverId)
@@ -202,7 +273,7 @@ namespace RedlineDiagnostics.Forms.Pages
 
             protected override void OnMouseClick(MouseEventArgs e)
             {
-                if (e.Button == MouseButtons.Left)
+                if (e.Button == MouseButtons.Left && !(Scroller != null && Scroller.SuppressClick))
                 {
                     var h = _hots.LastOrDefault(x => x.Rect.Contains(e.Location));
                     h?.Click?.Invoke();
@@ -699,7 +770,7 @@ namespace RedlineDiagnostics.Forms.Pages
 
         internal sealed class RecentCard : DashCard
         {
-            public RecentCard(HomePage page) : base(page) { }
+            public RecentCard(HomePage page) : base(page) { EnableScrolling(); }
 
             protected override void PaintCard(Graphics g)
             {
@@ -712,7 +783,7 @@ namespace RedlineDiagnostics.Forms.Pages
                 AddHot("all", vr, () => Page.Go(5));
                 using (var pen = new Pen(Theme.BorderSoft, 1f)) g.DrawLine(pen, 12, 54, Width - 12, 54);
 
-                var items = st.History.Take(4).ToList();
+                var items = st.History.Take(50).ToList();
                 if (items.Count == 0)
                 {
                     Text(g, Loc.T("history.none"), 10f, false, Theme.TextMuted, new Rectangle(0, 60, Width, Height - 70), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
@@ -720,10 +791,16 @@ namespace RedlineDiagnostics.Forms.Pages
                 }
                 float y = 62, rowH = 56;
                 var thumb = CarImages.Get(CarShot.Thumb, new Size(76, 40));
+                var vp = new Rectangle(8, 60, Width - 16, Height - 66);
+                int content = (int)(items.Count * rowH);
+                int rowW = Width - 20 - (Overflows(content, vp.Height) ? 8 : 0);
+                var clip = BeginViewport(g, vp, content);
+                y -= ScrollOffset;
                 for (int i = 0; i < items.Count; i++)
                 {
                     var s = items[i];
-                    var row = new RectangleF(10, y + i * rowH, Width - 20, rowH - 6);
+                    var row = new RectangleF(10, y + i * rowH, rowW, rowH - 6);
+                    if (row.Bottom < vp.Top || row.Top > vp.Bottom) continue;
                     string id = "row" + i;
                     bool hov = IsHover(id);
                     Theme.FillRounded(g, row, 8, hov ? Alpha(Theme.Cyan, 18) : Alpha(Color.White, 6));
@@ -755,8 +832,9 @@ namespace RedlineDiagnostics.Forms.Pages
                     Theme.DrawRounded(g, pr, 12, Alpha(pc, 110));
                     Text(g, pill, 8.5f, false, Theme.Lerp(pc, Color.White, 0.2f), Rectangle.Round(pr), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
                     Icons.Draw(g, "forward", new RectangleF(row.Right - 26, row.Y + row.Height / 2 - 7, 14, 14), Theme.Text, 1.7f);
-                    AddHot(id, row, () => Page.Go(5));
+                    AddRowHot(id, row, () => Page.Go(5));
                 }
+                EndViewport(g, clip);
             }
         }
 
@@ -782,10 +860,11 @@ namespace RedlineDiagnostics.Forms.Pages
                     Bounds = new Rectangle(44, 61, Width - 150, 20),
                     MaxLength = 12
                 };
-                _box.TextChanged += (s, e) => { _query = _box.Text.Trim(); Invalidate(); };
+                _box.TextChanged += (s, e) => { _query = _box.Text.Trim(); Scroller.Reset(); Invalidate(); };
                 _box.KeyDown += (s, e) => { if (e.KeyCode == Keys.Enter) { e.SuppressKeyPress = true; OpenFirst(); } };
                 _box.HandleCreated += (s, e) => SetCue();
                 Controls.Add(_box);
+                EnableScrolling();
             }
 
             protected override void OnResize(EventArgs e)
@@ -809,7 +888,7 @@ namespace RedlineDiagnostics.Forms.Pages
             private List<DtcInfo> Results()
             {
                 if (_query.Length == 0) return Popular.Select(DtcDatabase.Lookup).ToList();
-                return DtcDatabase.Search(_query, 4).Take(4).ToList();
+                return DtcDatabase.Search(_query, 30).Take(30).ToList();
             }
 
             private void OpenFirst()
@@ -846,10 +925,16 @@ namespace RedlineDiagnostics.Forms.Pages
                     return;
                 }
                 float y = 124, rowH = 41;
+                var vp = new Rectangle(12, 122, Width - 20, Height - 128);
+                int content = (int)(list.Count * rowH);
+                int rowW = Width - 28 - (Overflows(content, vp.Height) ? 6 : 0);
+                var clip = BeginViewport(g, vp, content);
+                y -= ScrollOffset;
                 for (int i = 0; i < list.Count; i++)
                 {
                     var d = list[i];
-                    var row = new RectangleF(14, y + i * rowH, Width - 28, rowH - 5);
+                    var row = new RectangleF(14, y + i * rowH, rowW, rowH - 5);
+                    if (row.Bottom < vp.Top || row.Top > vp.Bottom) continue;
                     string id = "dtc" + i;
                     bool h = IsHover(id);
                     Theme.FillRounded(g, row, 7, h ? Alpha(Theme.Red, 26) : Alpha(Color.White, 7));
@@ -864,8 +949,9 @@ namespace RedlineDiagnostics.Forms.Pages
                     Text(g, d.SystemName, 7.5f, false, Theme.TextMuted, new Rectangle(tx, (int)row.Y + 18, (int)(row.Right - 24 - tx), 16));
                     Icons.Draw(g, "forward", new RectangleF(row.Right - 20, row.Y + row.Height / 2 - 6, 12, 12), Theme.TextMuted, 1.6f);
                     var dd = d;
-                    AddHot(id, row, () => ShowDtc(dd));
+                    AddRowHot(id, row, () => ShowDtc(dd));
                 }
+                EndViewport(g, clip);
             }
         }
 

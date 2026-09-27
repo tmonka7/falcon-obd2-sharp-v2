@@ -15,6 +15,8 @@ namespace RedlineDiagnostics.Controls
         private readonly RectangleF[] _langSeg = new RectangleF[3];
         private int _hoverLang = -1;
         private bool _hoverBack, _hoverConn;
+        private readonly RectangleF[] _winBtn = new RectangleF[3]; // minimize, maximize / restore, close
+        private int _hoverWin = -1;
 
         public string Title { get; set; } = "";
         public string Subtitle { get; set; } = "";
@@ -22,14 +24,22 @@ namespace RedlineDiagnostics.Controls
         /// <summary>Home page: show the brand tagline instead of a page title.</summary>
         public bool ShowTagline { get; set; }
 
+        /// <summary>Drives the maximize / restore glyph.</summary>
+        public bool Maximized { get; set; }
+
         public event Action BackClicked;
         public event Action ConnectClicked;
+        public event Action MinimizeClicked;
+        public event Action MaximizeClicked;
+        public event Action CloseClicked;
+        /// <summary>Press on an empty part of the bar (the window can be moved from here when it is not maximized).</summary>
+        public event Action DragAreaPressed;
 
         public TopBar()
         {
             Height = 56;
             BackColor = Theme.TopBar;
-            _clock.Tick += (s, e) => Invalidate(new Rectangle(Width - 180, 0, 180, Height));
+            _clock.Tick += (s, e) => Invalidate();
             _clock.Start();
         }
 
@@ -39,24 +49,53 @@ namespace RedlineDiagnostics.Controls
             for (int i = 0; i < 3; i++) if (_langSeg[i].Contains(e.Location)) hl = i;
             bool hb = ShowBack && _backRect.Contains(e.Location);
             bool hc = _connRect.Contains(e.Location);
-            if (hl != _hoverLang || hb != _hoverBack || hc != _hoverConn)
+            int hw = -1;
+            for (int i = 0; i < 3; i++) if (_winBtn[i].Contains(e.Location)) hw = i;
+            if (hl != _hoverLang || hb != _hoverBack || hc != _hoverConn || hw != _hoverWin)
             {
-                _hoverLang = hl; _hoverBack = hb; _hoverConn = hc;
-                Cursor = (hl >= 0 || hb || hc) ? Cursors.Hand : Cursors.Default;
+                _hoverLang = hl; _hoverBack = hb; _hoverConn = hc; _hoverWin = hw;
+                Cursor = (hl >= 0 || hb || hc || hw >= 0) ? Cursors.Hand : Cursors.Default;
                 Invalidate();
             }
             base.OnMouseMove(e);
         }
 
+        private bool IsInteractive(Point p)
+        {
+            for (int i = 0; i < 3; i++) if (_langSeg[i].Contains(p) || _winBtn[i].Contains(p)) return true;
+            return (ShowBack && _backRect.Contains(p)) || _connRect.Contains(p);
+        }
+
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            if (e.Button == MouseButtons.Left && e.Clicks == 1 && !IsInteractive(e.Location)) DragAreaPressed?.Invoke();
+        }
+
+        protected override void OnMouseDoubleClick(MouseEventArgs e)
+        {
+            base.OnMouseDoubleClick(e);
+            if (e.Button == MouseButtons.Left && !IsInteractive(e.Location)) MaximizeClicked?.Invoke();
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseUp(e);
+            if (Touch.IsTouchMessage()) { _hoverLang = _hoverWin = -1; _hoverBack = _hoverConn = false; Invalidate(); }
+        }
+
         protected override void OnMouseLeave(EventArgs e)
         {
-            _hoverLang = -1; _hoverBack = _hoverConn = false;
+            _hoverLang = -1; _hoverWin = -1; _hoverBack = _hoverConn = false;
             Invalidate();
             base.OnMouseLeave(e);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
+            if (_winBtn[0].Contains(e.Location)) { MinimizeClicked?.Invoke(); return; }
+            if (_winBtn[1].Contains(e.Location)) { MaximizeClicked?.Invoke(); return; }
+            if (_winBtn[2].Contains(e.Location)) { CloseClicked?.Invoke(); return; }
             for (int i = 0; i < 3; i++)
                 if (_langSeg[i].Contains(e.Location)) { Loc.Current = (Language)i; return; }
             if (ShowBack && _backRect.Contains(e.Location)) { BackClicked?.Invoke(); return; }
@@ -104,7 +143,45 @@ namespace RedlineDiagnostics.Controls
             }
 
             // ---- right side ----
-            float rx = Width - 18;
+            float rx = Width - 6;
+
+            // window buttons (finger-sized: 44 x 44)
+            const float bw = 44, bh = 44;
+            for (int i = 2; i >= 0; i--)
+            {
+                rx -= bw;
+                _winBtn[i] = new RectangleF(rx, (Height - bh) / 2f, bw, bh);
+                rx -= i > 0 ? 2 : 0;
+            }
+            for (int i = 0; i < 3; i++)
+            {
+                var r = _winBtn[i];
+                bool hov = _hoverWin == i;
+                if (hov) Theme.FillRounded(g, r, 8, i == 2 ? Theme.Red : Theme.WithAlpha(Color.White, 28));
+                var c = hov && i == 2 ? Color.White : Theme.Text;
+                float cx = r.X + r.Width / 2, cy = r.Y + r.Height / 2;
+                using (var pen = new Pen(c, 1.6f))
+                {
+                    if (i == 0) g.DrawLine(pen, cx - 7, cy + 1, cx + 7, cy + 1);
+                    else if (i == 1)
+                    {
+                        if (Maximized)
+                        {
+                            g.DrawRectangle(pen, cx - 7, cy - 3, 10, 10);
+                            g.DrawLines(pen, new[] { new PointF(cx - 4, cy - 3), new PointF(cx - 4, cy - 6), new PointF(cx + 6, cy - 6), new PointF(cx + 6, cy + 4), new PointF(cx + 3, cy + 4) });
+                        }
+                        else g.DrawRectangle(pen, cx - 7, cy - 7, 14, 14);
+                    }
+                    else
+                    {
+                        g.DrawLine(pen, cx - 7, cy - 7, cx + 7, cy + 7);
+                        g.DrawLine(pen, cx + 7, cy - 7, cx - 7, cy + 7);
+                    }
+                }
+            }
+            using (var pen = new Pen(Theme.Border, 1f))
+                g.DrawLine(pen, rx - 8, 14, rx - 8, Height - 14);
+            rx -= 20;
 
             // status icons
             var st = AppState.Instance;

@@ -48,6 +48,12 @@ namespace RedlineDiagnostics.Controls
 
         protected override void OnMouseLeave(EventArgs e) { _hover = -1; Invalidate(); base.OnMouseLeave(e); }
 
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            if (Touch.IsTouchMessage()) { _hover = -1; Invalidate(); }
+            base.OnMouseUp(e);
+        }
+
         protected override void OnMouseClick(MouseEventArgs e)
         {
             int h = HitTest(e.Location);

@@ -43,6 +43,10 @@ namespace RedlineDiagnostics.Forms
                 var st = AppState.Instance;
                 if (st.IsConnected) st.Disconnect(); else st.ConnectAsync();
             };
+            _topBar.MinimizeClicked += () => WindowState = FormWindowState.Minimized;
+            _topBar.MaximizeClicked += ToggleMaximize;
+            _topBar.CloseClicked += Close;
+            _topBar.DragAreaPressed += BeginWindowDrag;
             _nav = new SideNav { Bounds = new Rectangle(0, 56, 160, DesignHeight - 56) };
             _nav.Navigate += ShowPage;
             _host = new Panel { Bounds = new Rectangle(160, 56, BasePage.PageWidth, BasePage.PageHeight), BackColor = Theme.Background };
@@ -137,22 +141,28 @@ namespace RedlineDiagnostics.Forms
             var diag = (DiagnosePage)_pages[1];
             if (AutoTestQuick)
             {
+                // the car renders are made in the background after the model loads (about 3-5 s)
+                // Off-screen windows get no WM_PAINT, so a first capture is what requests the car renders.
                 at(4000, () => shot("home_en"));
-                at(4200, () => { Loc.Current = Language.JA; });
-                at(5200, () => shot("home_ja"));
-                at(5400, () => { Loc.Current = Language.ZH; });
-                at(6400, () => shot("home_zh"));
-                at(6600, () => { Loc.Current = Language.EN; ShowPage(1); });
-                at(7400, () => shot("diagnose"));
-                at(7600, () => Close());
+                at(7000, () => shot("home_en"));
+                at(7200, () => { Loc.Current = Language.JA; });
+                at(8200, () => shot("home_ja"));
+                at(8400, () => { Loc.Current = Language.ZH; });
+                at(9400, () => shot("home_zh"));
+                at(9600, () => { Loc.Current = Language.EN; ShowPage(1); });
+                at(10400, () => shot("diagnose"));
+                at(10600, () => Close());
             }
             else
             {
+            at(3000, () => shot("01_home")); // warm-up: requests the background car renders
             at(4000, () => shot("01_home"));
             at(4500, () => { ShowPage(1); diag.StartScanIfPossible(); });
             at(12000, () => shot("02_scan"));
             at(24000, () => shot("03_scan_mid"));
             at(46000, () => shot("04_scan_done"));
+            at(46300, () => { foreach (var c in Descendants(diag)) (c as DiagnosticAreaPanel)?.ScrollToEnd(); });
+            at(46800, () => shot("04b_panel_scrolled"));
             at(47000, () => { Loc.Current = Language.JA; });
             at(48500, () => shot("05_ja"));
             at(49000, () => { Loc.Current = Language.ZH; });
@@ -192,6 +202,57 @@ namespace RedlineDiagnostics.Forms
             timer.Start();
         }
 
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern bool ReleaseCapture();
+
+        [System.Runtime.InteropServices.DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wParam, IntPtr lParam);
+
+        /// <summary>Borderless windows still get minimize-on-taskbar-click and Win+Down when WS_MINIMIZEBOX is set.</summary>
+        protected override CreateParams CreateParams
+        {
+            get
+            {
+                var cp = base.CreateParams;
+                cp.Style |= 0x00020000; // WS_MINIMIZEBOX
+                return cp;
+            }
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            Touch.Configure(Handle, false);
+            if (_canvas != null) Touch.Configure(_canvas.Handle, false);
+            if (_host != null) Touch.Configure(_host.Handle, false);
+        }
+
+        /// <summary>Maximize = cover the whole screen (full-screen mode); restore = a movable 1366 x 768 window.</summary>
+        private void ToggleMaximize()
+        {
+            var s = AppState.Instance.Settings;
+            s.FullScreen = !s.FullScreen;
+            s.Save();
+            if (WindowState != FormWindowState.Normal) WindowState = FormWindowState.Normal;
+            PositionWindow();
+        }
+
+        private void BeginWindowDrag()
+        {
+            if (AppState.Instance.Settings.FullScreen || !string.IsNullOrEmpty(AutoTestDir)) return;
+            ReleaseCapture();
+            SendMessage(Handle, 0x00A1 /* WM_NCLBUTTONDOWN */, (IntPtr)2 /* HTCAPTION */, IntPtr.Zero);
+        }
+
+        private static System.Collections.Generic.IEnumerable<Control> Descendants(Control root)
+        {
+            foreach (Control c in root.Controls)
+            {
+                yield return c;
+                foreach (var d in Descendants(c)) yield return d;
+            }
+        }
+
         private void PositionWindow()
         {
             var screen = Screen.PrimaryScreen.Bounds;
@@ -212,6 +273,7 @@ namespace RedlineDiagnostics.Forms
             }
             MinimumSize = MaximumSize = Size;
             TopMost = false;
+            if (_topBar != null) { _topBar.Maximized = full; _topBar.Invalidate(); }
         }
 
         protected override void OnResize(EventArgs e)
@@ -287,9 +349,7 @@ namespace RedlineDiagnostics.Forms
             else if (e.KeyCode == Keys.F11)
             {
                 var s = AppState.Instance.Settings;
-                s.FullScreen = !s.FullScreen;
-                s.Save();
-                PositionWindow();
+                ToggleMaximize();
                 e.Handled = true;
             }
             base.OnKeyDown(e);

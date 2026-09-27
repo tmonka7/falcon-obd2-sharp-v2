@@ -20,6 +20,17 @@ namespace RedlineDiagnostics.Forms.Pages
         private LiveDataMonitor _monitor;
         private readonly Timer _timer = new Timer { Interval = 250 };
         private readonly Rectangle _grid = new Rectangle(10, 76, 1186, 626);
+        private const int Cols = 4, Gap = 10, TileHeight = 202;
+        private readonly TouchScroller _scroller;
+
+        private int ContentHeight
+        {
+            get
+            {
+                int rows = (LiveParam.Ecm.Length + Cols - 1) / Cols;
+                return rows * TileHeight + (rows - 1) * Gap;
+            }
+        }
 
         public override string TitleKey => "nav.livedata";
 
@@ -34,8 +45,15 @@ namespace RedlineDiagnostics.Forms.Pages
             _timer.Tick += (s, e) => { if (Visible) { UpdateRate(); Invalidate(_grid); } };
             AppState.Instance.ConnectionChanged += () => { if (!AppState.Instance.IsConnected) StopMonitor(); UpdateButton(); };
             AppState.Instance.ScanStateChanged += () => { if (AppState.Instance.IsScanning) StopMonitor(); UpdateButton(); };
+            _scroller = new TouchScroller(this) { Max = () => Math.Max(0, ContentHeight - _grid.Height) };
+            _scroller.Scrolled += () => Invalidate(_grid);
             ApplyLocalization();
         }
+
+        protected override void OnMouseDown(MouseEventArgs e) { if (e.Button == MouseButtons.Left && _grid.Contains(e.Location)) _scroller.MouseDown(e.Location); base.OnMouseDown(e); }
+        protected override void OnMouseMove(MouseEventArgs e) { _scroller.MouseMove(e.Location); base.OnMouseMove(e); }
+        protected override void OnMouseUp(MouseEventArgs e) { _scroller.MouseUp(); base.OnMouseUp(e); }
+        protected override void OnMouseWheel(MouseEventArgs e) { _scroller.Wheel(e.Delta, TileHeight / 2); base.OnMouseWheel(e); }
 
         public override void OnShown()
         {
@@ -107,17 +125,20 @@ namespace RedlineDiagnostics.Forms.Pages
             var g = e.Graphics;
             Theme.Setup(g);
             var pars = LiveParam.Ecm;
-            int cols = 4, rows = 3;
-            int gap = 10;
-            int w = (_grid.Width - gap * (cols - 1)) / cols;
-            int h = (_grid.Height - gap * (rows - 1)) / rows;
-            for (int i = 0; i < pars.Length && i < cols * rows; i++)
+            int w = (_grid.Width - Gap * (Cols - 1)) / Cols;
+            // All parameters in fixed-height tiles; the grid scrolls (drag / wheel) when they do not fit.
+            var state = g.Save();
+            g.SetClip(_grid);
+            for (int i = 0; i < pars.Length; i++)
             {
                 var p = pars[i];
-                int cx = _grid.X + (i % cols) * (w + gap);
-                int cy = _grid.Y + (i / cols) * (h + gap);
-                DrawTile(g, new Rectangle(cx, cy, w, h), p);
+                int cx = _grid.X + (i % Cols) * (w + Gap);
+                int cy = _grid.Y + (i / Cols) * (TileHeight + Gap) - _scroller.Offset;
+                if (cy > _grid.Bottom || cy + TileHeight < _grid.Y) continue;
+                DrawTile(g, new Rectangle(cx, cy, w, TileHeight), p);
             }
+            g.Restore(state);
+            _scroller.DrawIndicator(g, new Rectangle(_grid.X, _grid.Y, _grid.Width + 8, _grid.Height), ContentHeight);
         }
 
         private void DrawTile(Graphics g, Rectangle r, LiveParam p)

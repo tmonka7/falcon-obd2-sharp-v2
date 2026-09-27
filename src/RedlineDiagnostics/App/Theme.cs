@@ -166,12 +166,13 @@ namespace RedlineDiagnostics.App
 
         public static void DrawText(Graphics g, string text, Font font, Color color, Rectangle rect, TextFormatFlags flags)
         {
-            TextRenderer.DrawText(g, text, font, rect, color, flags | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix);
+            // PreserveGraphicsClipping: TextRenderer ignores Graphics.SetClip otherwise, which scroll viewports rely on.
+            TextRenderer.DrawText(g, text, font, rect, color, flags | TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.PreserveGraphicsClipping);
         }
 
         public static void DrawText(Graphics g, string text, Font font, Color color, Point at)
         {
-            TextRenderer.DrawText(g, text, font, at, color, TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix);
+            TextRenderer.DrawText(g, text, font, at, color, TextFormatFlags.NoPadding | TextFormatFlags.NoPrefix | TextFormatFlags.PreserveGraphicsClipping);
         }
 
         public static Size Measure(string text, Font font)

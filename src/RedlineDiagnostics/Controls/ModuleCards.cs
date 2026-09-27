@@ -18,28 +18,37 @@ namespace RedlineDiagnostics.Controls
         public ControlModule ActiveModule { get; set; }
         public event Action<ControlModule> ModuleSelected;
 
-        private int _scroll;
+        private readonly TouchScroller _scroller;
         private int _hover = -1;
+        private int _scroll => _scroller.Offset;
         private RectangleF _leftBtn, _rightBtn;
 
         public ModuleCardStrip()
         {
             BackColor = Theme.Background;
             Height = 124;
+            _scroller = new TouchScroller(this, horizontal: true) { Max = () => MaxScroll };
+            _scroller.Scrolled += Invalidate;
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing) _scroller.Dispose();
+            base.Dispose(disposing);
         }
 
         private int ContentWidth => Modules.Count * (CardWidth + Gap) - Gap;
-        private int ViewWidth => Width - 36;
+        private int ViewWidth => Width - 38;
         private int MaxScroll => Math.Max(0, ContentWidth - ViewWidth);
 
         public void EnsureVisible(ControlModule m)
         {
             int idx = Modules.IndexOf(m);
             if (idx < 0) return;
+            if (_scroller.IsPressed) return; // do not fight the user's finger
             int x = idx * (CardWidth + Gap);
-            if (x < _scroll) _scroll = x;
-            else if (x + CardWidth > _scroll + ViewWidth) _scroll = x + CardWidth - ViewWidth;
-            _scroll = Math.Max(0, Math.Min(MaxScroll, _scroll));
+            if (x < _scroll) _scroller.SetOffset(x);
+            else if (x + CardWidth > _scroll + ViewWidth) _scroller.SetOffset(x + CardWidth - ViewWidth);
             Invalidate();
         }
 
@@ -54,8 +63,22 @@ namespace RedlineDiagnostics.Controls
             return idx;
         }
 
+        protected override void OnMouseDown(MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left && !_leftBtn.Contains(e.Location) && !_rightBtn.Contains(e.Location)) _scroller.MouseDown(e.Location);
+            base.OnMouseDown(e);
+        }
+
+        protected override void OnMouseUp(MouseEventArgs e)
+        {
+            _scroller.MouseUp();
+            if (Touch.IsTouchMessage()) { _hover = -1; Invalidate(); }
+            base.OnMouseUp(e);
+        }
+
         protected override void OnMouseMove(MouseEventArgs e)
         {
+            if (_scroller.MouseMove(e.Location)) { _hover = -1; base.OnMouseMove(e); return; }
             int h = HitTest(e.Location);
             bool btn = _leftBtn.Contains(e.Location) || _rightBtn.Contains(e.Location);
             Cursor = h >= 0 || btn ? Cursors.Hand : Cursors.Default;
@@ -67,15 +90,15 @@ namespace RedlineDiagnostics.Controls
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
-            _scroll = Math.Max(0, Math.Min(MaxScroll, _scroll - Math.Sign(e.Delta) * (CardWidth + Gap)));
-            Invalidate();
+            _scroller.Wheel(e.Delta, CardWidth + Gap);
             base.OnMouseWheel(e);
         }
 
         protected override void OnMouseClick(MouseEventArgs e)
         {
-            if (_rightBtn.Contains(e.Location)) { _scroll = Math.Min(MaxScroll, _scroll + (CardWidth + Gap) * 2); Invalidate(); return; }
-            if (_leftBtn.Contains(e.Location)) { _scroll = Math.Max(0, _scroll - (CardWidth + Gap) * 2); Invalidate(); return; }
+            if (_scroller.SuppressClick) return; // the press was a swipe
+            if (_rightBtn.Contains(e.Location)) { _scroller.SetOffset(_scroll + (CardWidth + Gap) * 2); return; }
+            if (_leftBtn.Contains(e.Location)) { _scroller.SetOffset(_scroll - (CardWidth + Gap) * 2); return; }
             int h = HitTest(e.Location);
             if (h >= 0)
             {
@@ -107,16 +130,16 @@ namespace RedlineDiagnostics.Controls
             g.ResetClip();
 
             // scroll buttons
-            _rightBtn = new RectangleF(Width - 30, 4 + CardHeight / 2f - 18, 26, 36);
-            _leftBtn = MaxScroll > 0 && _scroll > 0 ? new RectangleF(-2, 4 + CardHeight / 2f - 18, 26, 36) : RectangleF.Empty;
+            _rightBtn = new RectangleF(Width - 34, 4 + CardHeight / 2f - 24, 32, 48);
+            _leftBtn = MaxScroll > 0 && _scroll > 0 ? new RectangleF(-2, 4 + CardHeight / 2f - 24, 32, 48) : RectangleF.Empty;
             Theme.FillRounded(g, _rightBtn, 8, Theme.Card);
             Theme.DrawRounded(g, _rightBtn, 8, Theme.Border);
-            Icons.Draw(g, "forward", new RectangleF(_rightBtn.X + 6, _rightBtn.Y + 10, 14, 16), _scroll < MaxScroll ? Theme.Text : Theme.TextDim, 1.8f);
+            Icons.Draw(g, "forward", new RectangleF(_rightBtn.X + 9, _rightBtn.Y + 16, 14, 16), _scroll < MaxScroll ? Theme.Text : Theme.TextDim, 1.8f);
             if (_leftBtn.Width > 0)
             {
                 Theme.FillRounded(g, _leftBtn, 8, Theme.Card);
                 Theme.DrawRounded(g, _leftBtn, 8, Theme.Border);
-                Icons.Draw(g, "back", new RectangleF(_leftBtn.X + 6, _leftBtn.Y + 10, 14, 16), Theme.Text, 1.8f);
+                Icons.Draw(g, "back", new RectangleF(_leftBtn.X + 9, _leftBtn.Y + 16, 14, 16), Theme.Text, 1.8f);
             }
         }
 
