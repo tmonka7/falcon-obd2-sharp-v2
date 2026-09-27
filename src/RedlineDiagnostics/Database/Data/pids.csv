@@ -1,0 +1,76 @@
+pid,name_en,name_ja,name_zh,unit
+00,PIDs supported [01-20],対応 PID [01-20],支持的 PID [01-20],
+01,Monitor status since DTCs cleared,DTC 消去後のモニター状態,故障码清除后的监测状态,
+02,Freeze DTC,フリーズ DTC,冻结故障码,
+03,Fuel system status,燃料システム状態,燃油系统状态,
+04,Calculated engine load,計算エンジン負荷,计算负荷值,%
+05,Engine coolant temperature,エンジン冷却水温,发动机冷却液温度,°C
+06,Short term fuel trim (Bank 1),短期燃料補正 (バンク 1),短期燃油修正 (第1排),%
+07,Long term fuel trim (Bank 1),長期燃料補正 (バンク 1),长期燃油修正 (第1排),%
+08,Short term fuel trim (Bank 2),短期燃料補正 (バンク 2),短期燃油修正 (第2排),%
+09,Long term fuel trim (Bank 2),長期燃料補正 (バンク 2),长期燃油修正 (第2排),%
+0A,Fuel pressure,燃料圧力,燃油压力,kPa
+0B,Intake manifold absolute pressure,吸気マニホールド絶対圧,进气歧管绝对压力,kPa
+0C,Engine RPM,エンジン回転数,发动机转速,rpm
+0D,Vehicle speed,車速,车速,km/h
+0E,Timing advance,点火進角,点火提前角,°
+0F,Intake air temperature,吸気温度,进气温度,°C
+10,MAF air flow rate,MAF 吸入空気量,空气流量,g/s
+11,Throttle position,スロットル開度,节气门位置,%
+12,Commanded secondary air status,二次空気指令状態,二次空气指令状态,
+13,Oxygen sensors present,O2 センサー装備,氧传感器配置,
+14,O2 Sensor 1 voltage,O2 センサー 1 電圧,氧传感器 1 电压,V
+15,O2 Sensor 2 voltage,O2 センサー 2 電圧,氧传感器 2 电压,V
+16,O2 Sensor 3 voltage,O2 センサー 3 電圧,氧传感器 3 电压,V
+17,O2 Sensor 4 voltage,O2 センサー 4 電圧,氧传感器 4 电压,V
+18,O2 Sensor 5 voltage,O2 センサー 5 電圧,氧传感器 5 电压,V
+19,O2 Sensor 6 voltage,O2 センサー 6 電圧,氧传感器 6 电压,V
+1A,O2 Sensor 7 voltage,O2 センサー 7 電圧,氧传感器 7 电压,V
+1B,O2 Sensor 8 voltage,O2 センサー 8 電圧,氧传感器 8 电压,V
+1C,OBD standards conformance,OBD 規格適合,OBD 标准符合性,
+1D,Oxygen sensors present (4 banks),O2 センサー装備 (4 バンク),氧传感器配置 (4排),
+1E,Auxiliary input status,補助入力状態,辅助输入状态,
+1F,Run time since engine start,エンジン始動後の経過時間,发动机启动后运行时间,s
+20,PIDs supported [21-40],対応 PID [21-40],支持的 PID [21-40],
+21,Distance traveled with MIL on,MIL 点灯後走行距離,故障灯亮起后行驶距离,km
+22,Fuel rail pressure (relative),燃料レール圧 (相対),燃油轨压力 (相对),kPa
+23,Fuel rail gauge pressure,燃料レール圧 (直噴),燃油轨表压,kPa
+24,O2 Sensor 1 (wide range) lambda,O2 センサー 1 (広域) λ,宽域氧传感器 1 λ,
+2C,Commanded EGR,EGR 指令値,EGR 指令,%
+2D,EGR error,EGR 誤差,EGR 误差,%
+2E,Commanded evaporative purge,パージ指令値,蒸发排放净化指令,%
+2F,Fuel tank level input,燃料残量,燃油箱液位,%
+30,Warm-ups since codes cleared,DTC 消去後の暖機回数,故障码清除后暖机次数,
+31,Distance since codes cleared,DTC 消去後走行距離,故障码清除后行驶距离,km
+32,Evap system vapor pressure,蒸発ガス圧,蒸发系统蒸汽压力,Pa
+33,Absolute barometric pressure,大気圧,绝对大气压,kPa
+3C,Catalyst temperature B1S1,触媒温度 B1S1,催化器温度 B1S1,°C
+3D,Catalyst temperature B2S1,触媒温度 B2S1,催化器温度 B2S1,°C
+3E,Catalyst temperature B1S2,触媒温度 B1S2,催化器温度 B1S2,°C
+3F,Catalyst temperature B2S2,触媒温度 B2S2,催化器温度 B2S2,°C
+40,PIDs supported [41-60],対応 PID [41-60],支持的 PID [41-60],
+41,Monitor status this drive cycle,今回走行のモニター状態,本次驾驶循环监测状态,
+42,Control module voltage,制御モジュール電圧,控制模块电压,V
+43,Absolute load value,絶対負荷値,绝对负荷值,%
+44,Commanded equivalence ratio,目標当量比,指令空燃当量比,
+45,Relative throttle position,相対スロットル位置,相对节气门位置,%
+46,Ambient air temperature,外気温,环境温度,°C
+47,Absolute throttle position B,絶対スロットル位置 B,绝对节气门位置 B,%
+49,Accelerator pedal position D,アクセルペダル位置 D,油门踏板位置 D,%
+4A,Accelerator pedal position E,アクセルペダル位置 E,油门踏板位置 E,%
+4C,Commanded throttle actuator,スロットルアクチュエーター指令,节气门执行器指令,%
+4D,Time run with MIL on,MIL 点灯時間,故障灯亮起运行时间,min
+4E,Time since codes cleared,DTC 消去後経過時間,故障码清除后时间,min
+51,Fuel type,燃料種別,燃油类型,
+52,Ethanol fuel %,エタノール比率,乙醇燃料比例,%
+5A,Relative accelerator pedal position,相対アクセルペダル位置,相对油门踏板位置,%
+5B,Hybrid battery pack remaining life,ハイブリッドバッテリー残量,混动电池剩余电量,%
+5C,Engine oil temperature,エンジン油温,发动机机油温度,°C
+5D,Fuel injection timing,燃料噴射時期,燃油喷射正时,°
+5E,Engine fuel rate,燃料消費率,发动机燃油消耗率,L/h
+60,PIDs supported [61-80],対応 PID [61-80],支持的 PID [61-80],
+61,Driver's demand engine torque,要求エンジントルク,驾驶员需求扭矩,%
+62,Actual engine torque,実エンジントルク,实际发动机扭矩,%
+63,Engine reference torque,基準エンジントルク,发动机参考扭矩,Nm
+67,Engine coolant temperature (2 sensors),冷却水温 (2 センサー),冷却液温度 (2传感器),°C
+A6,Odometer,走行距離計,里程表,km

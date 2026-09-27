@@ -1,0 +1,322 @@
+code,en,ja,zh
+P0010,"Intake Camshaft Position Actuator Circuit (Bank 1)",吸気カムシャフト位置アクチュエーター回路 (バンク 1),进气凸轮轴位置执行器电路 (第1排)
+P0011,"Intake Camshaft Position Timing Over-Advanced (Bank 1)",吸気カムシャフト位置 進角過大 (バンク 1),进气凸轮轴正时过度提前 (第1排)
+P0012,"Intake Camshaft Position Timing Over-Retarded (Bank 1)",吸気カムシャフト位置 遅角過大 (バンク 1),进气凸轮轴正时过度滞后 (第1排)
+P0013,"Exhaust Camshaft Position Actuator Circuit (Bank 1)",排気カムシャフト位置アクチュエーター回路 (バンク 1),排气凸轮轴位置执行器电路 (第1排)
+P0014,"Exhaust Camshaft Position Timing Over-Advanced (Bank 1)",排気カムシャフト位置 進角過大 (バンク 1),排气凸轮轴正时过度提前 (第1排)
+P0016,"Crankshaft/Camshaft Position Correlation (Bank 1 Sensor A)",クランク/カム位置相関異常 (バンク 1 センサー A),曲轴/凸轮轴位置相关性 (第1排传感器A)
+P0017,"Crankshaft/Camshaft Position Correlation (Bank 1 Sensor B)",クランク/カム位置相関異常 (バンク 1 センサー B),曲轴/凸轮轴位置相关性 (第1排传感器B)
+P0020,"Intake Camshaft Position Actuator Circuit (Bank 2)",吸気カムシャフト位置アクチュエーター回路 (バンク 2),进气凸轮轴位置执行器电路 (第2排)
+P0021,"Intake Camshaft Position Timing Over-Advanced (Bank 2)",吸気カムシャフト位置 進角過大 (バンク 2),进气凸轮轴正时过度提前 (第2排)
+P0030,"HO2S Heater Control Circuit (Bank 1 Sensor 1)",O2 センサーヒーター制御回路 (バンク 1 センサー 1),氧传感器加热器控制电路 (第1排传感器1)
+P0031,"HO2S Heater Control Circuit Low (Bank 1 Sensor 1)",O2 センサーヒーター制御回路 低電圧 (バンク 1 センサー 1),氧传感器加热器控制电路电压低 (第1排传感器1)
+P0032,"HO2S Heater Control Circuit High (Bank 1 Sensor 1)",O2 センサーヒーター制御回路 高電圧 (バンク 1 センサー 1),氧传感器加热器控制电路电压高 (第1排传感器1)
+P0036,"HO2S Heater Control Circuit (Bank 1 Sensor 2)",O2 センサーヒーター制御回路 (バンク 1 センサー 2),氧传感器加热器控制电路 (第1排传感器2)
+P0037,"HO2S Heater Control Circuit Low (Bank 1 Sensor 2)",O2 センサーヒーター制御回路 低電圧 (バンク 1 センサー 2),氧传感器加热器控制电路电压低 (第1排传感器2)
+P0038,"HO2S Heater Control Circuit High (Bank 1 Sensor 2)",O2 センサーヒーター制御回路 高電圧 (バンク 1 センサー 2),氧传感器加热器控制电路电压高 (第1排传感器2)
+P0100,"Mass or Volume Air Flow Circuit Malfunction",エアフローメーター回路異常,空气流量计电路故障
+P0101,"Mass or Volume Air Flow Circuit Range/Performance",エアフローメーター回路 範囲/性能異常,空气流量计电路范围/性能故障
+P0102,"Mass or Volume Air Flow Circuit Low Input",エアフローメーター回路 低入力,空气流量计电路输入低
+P0103,"Mass or Volume Air Flow Circuit High Input",エアフローメーター回路 高入力,空气流量计电路输入高
+P0105,"Manifold Absolute Pressure/Barometric Pressure Circuit",吸気圧/大気圧センサー回路異常,进气歧管绝对压力/大气压力电路故障
+P0106,"Manifold Absolute Pressure Circuit Range/Performance",吸気圧センサー回路 範囲/性能異常,进气歧管绝对压力电路范围/性能故障
+P0107,"Manifold Absolute Pressure Circuit Low Input",吸気圧センサー回路 低入力,进气歧管绝对压力电路输入低
+P0108,"Manifold Absolute Pressure Circuit High Input",吸気圧センサー回路 高入力,进气歧管绝对压力电路输入高
+P0110,"Intake Air Temperature Sensor Circuit Malfunction",吸気温センサー回路異常,进气温度传感器电路故障
+P0111,"Intake Air Temperature Sensor Circuit Range/Performance",吸気温センサー回路 範囲/性能異常,进气温度传感器电路范围/性能故障
+P0112,"Intake Air Temperature Sensor Circuit Low Input",吸気温センサー回路 低入力,进气温度传感器电路输入低
+P0113,"Intake Air Temperature Sensor Circuit High Input",吸気温センサー回路 高入力,进气温度传感器电路输入高
+P0115,"Engine Coolant Temperature Circuit Malfunction",水温センサー回路異常,冷却液温度传感器电路故障
+P0116,"Engine Coolant Temperature Circuit Range/Performance",水温センサー回路 範囲/性能異常,冷却液温度传感器电路范围/性能故障
+P0117,"Engine Coolant Temperature Circuit Low Input",水温センサー回路 低入力,冷却液温度传感器电路输入低
+P0118,"Engine Coolant Temperature Circuit High Input",水温センサー回路 高入力,冷却液温度传感器电路输入高
+P0120,"Throttle/Pedal Position Sensor A Circuit Malfunction",スロットル/ペダル位置センサー A 回路異常,节气门/踏板位置传感器A电路故障
+P0121,"Throttle/Pedal Position Sensor A Circuit Range/Performance",スロットル/ペダル位置センサー A 範囲/性能異常,节气门/踏板位置传感器A范围/性能故障
+P0122,"Throttle/Pedal Position Sensor A Circuit Low Input",スロットル/ペダル位置センサー A 低入力,节气门/踏板位置传感器A输入低
+P0123,"Throttle/Pedal Position Sensor A Circuit High Input",スロットル/ペダル位置センサー A 高入力,节气门/踏板位置传感器A输入高
+P0125,"Insufficient Coolant Temperature for Closed Loop Fuel Control",クローズドループ制御に必要な水温不足,冷却液温度不足以进行闭环燃油控制
+P0128,"Coolant Thermostat Temperature Below Regulating Temperature",サーモスタット 水温が規定温度未満,冷却液恒温器温度低于调节温度
+P0130,"O2 Sensor Circuit Malfunction (Bank 1 Sensor 1)",O2 センサー回路異常 (バンク 1 センサー 1),氧传感器电路故障 (第1排传感器1)
+P0131,"O2 Sensor Circuit Low Voltage (Bank 1 Sensor 1)",O2 センサー回路 低電圧 (バンク 1 センサー 1),氧传感器电路电压低 (第1排传感器1)
+P0132,"O2 Sensor Circuit High Voltage (Bank 1 Sensor 1)",O2 センサー回路 高電圧 (バンク 1 センサー 1),氧传感器电路电压高 (第1排传感器1)
+P0133,"O2 Sensor Circuit Slow Response (Bank 1 Sensor 1)",O2 センサー応答遅延 (バンク 1 センサー 1),氧传感器响应缓慢 (第1排传感器1)
+P0134,"O2 Sensor Circuit No Activity Detected (Bank 1 Sensor 1)",O2 センサー無反応 (バンク 1 センサー 1),氧传感器无活动 (第1排传感器1)
+P0135,"O2 Sensor Heater Circuit Malfunction (Bank 1 Sensor 1)",O2 センサーヒーター回路異常 (バンク 1 センサー 1),氧传感器加热器电路故障 (第1排传感器1)
+P0136,"O2 Sensor Circuit Malfunction (Bank 1 Sensor 2)",O2 センサー回路異常 (バンク 1 センサー 2),氧传感器电路故障 (第1排传感器2)
+P0137,"O2 Sensor Circuit Low Voltage (Bank 1 Sensor 2)",O2 センサー回路 低電圧 (バンク 1 センサー 2),氧传感器电路电压低 (第1排传感器2)
+P0138,"O2 Sensor Circuit High Voltage (Bank 1 Sensor 2)",O2 センサー回路 高電圧 (バンク 1 センサー 2),氧传感器电路电压高 (第1排传感器2)
+P0141,"O2 Sensor Heater Circuit Malfunction (Bank 1 Sensor 2)",O2 センサーヒーター回路異常 (バンク 1 センサー 2),氧传感器加热器电路故障 (第1排传感器2)
+P0150,"O2 Sensor Circuit Malfunction (Bank 2 Sensor 1)",O2 センサー回路異常 (バンク 2 センサー 1),氧传感器电路故障 (第2排传感器1)
+P0155,"O2 Sensor Heater Circuit Malfunction (Bank 2 Sensor 1)",O2 センサーヒーター回路異常 (バンク 2 センサー 1),氧传感器加热器电路故障 (第2排传感器1)
+P0156,"O2 Sensor Circuit Malfunction (Bank 2 Sensor 2)",O2 センサー回路異常 (バンク 2 センサー 2),氧传感器电路故障 (第2排传感器2)
+P0170,"Fuel Trim Malfunction (Bank 1)",燃料補正異常 (バンク 1),燃油修正故障 (第1排)
+P0171,"System Too Lean (Bank 1)",空燃比リーン異常 (バンク 1),系统过稀 (第1排)
+P0172,"System Too Rich (Bank 1)",空燃比リッチ異常 (バンク 1),系统过浓 (第1排)
+P0173,"Fuel Trim Malfunction (Bank 2)",燃料補正異常 (バンク 2),燃油修正故障 (第2排)
+P0174,"System Too Lean (Bank 2)",空燃比リーン異常 (バンク 2),系统过稀 (第2排)
+P0175,"System Too Rich (Bank 2)",空燃比リッチ異常 (バンク 2),系统过浓 (第2排)
+P0180,"Fuel Temperature Sensor A Circuit Malfunction",燃料温度センサー A 回路異常,燃油温度传感器A电路故障
+P0190,"Fuel Rail Pressure Sensor Circuit Malfunction",燃料レール圧センサー回路異常,燃油轨压力传感器电路故障
+P0191,"Fuel Rail Pressure Sensor Circuit Range/Performance",燃料レール圧センサー 範囲/性能異常,燃油轨压力传感器范围/性能故障
+P0200,"Injector Circuit Malfunction",インジェクター回路異常,喷油器电路故障
+P0201,"Injector Circuit Malfunction - Cylinder 1",インジェクター回路異常 - 1 番気筒,喷油器电路故障 - 1缸
+P0202,"Injector Circuit Malfunction - Cylinder 2",インジェクター回路異常 - 2 番気筒,喷油器电路故障 - 2缸
+P0203,"Injector Circuit Malfunction - Cylinder 3",インジェクター回路異常 - 3 番気筒,喷油器电路故障 - 3缸
+P0204,"Injector Circuit Malfunction - Cylinder 4",インジェクター回路異常 - 4 番気筒,喷油器电路故障 - 4缸
+P0205,"Injector Circuit Malfunction - Cylinder 5",インジェクター回路異常 - 5 番気筒,喷油器电路故障 - 5缸
+P0206,"Injector Circuit Malfunction - Cylinder 6",インジェクター回路異常 - 6 番気筒,喷油器电路故障 - 6缸
+P0217,"Engine Overtemperature Condition",エンジン過熱,发动机过热
+P0218,"Transmission Over Temperature Condition",トランスミッション過熱,变速箱过热
+P0219,"Engine Overspeed Condition",エンジン過回転,发动机超速
+P0220,"Throttle/Pedal Position Sensor B Circuit Malfunction",スロットル/ペダル位置センサー B 回路異常,节气门/踏板位置传感器B电路故障
+P0221,"Throttle/Pedal Position Sensor B Circuit Range/Performance",スロットル/ペダル位置センサー B 範囲/性能異常,节气门/踏板位置传感器B范围/性能故障
+P0222,"Throttle/Pedal Position Sensor B Circuit Low Input",スロットル/ペダル位置センサー B 低入力,节气门/踏板位置传感器B输入低
+P0223,"Throttle/Pedal Position Sensor B Circuit High Input",スロットル/ペダル位置センサー B 高入力,节气门/踏板位置传感器B输入高
+P0230,"Fuel Pump Primary Circuit Malfunction",燃料ポンプ一次回路異常,燃油泵初级电路故障
+P0234,"Turbocharger/Supercharger Overboost Condition",過給圧過大,涡轮/机械增压器增压过高
+P0299,"Turbocharger/Supercharger Underboost Condition",過給圧不足,涡轮/机械增压器增压不足
+P0300,"Random/Multiple Cylinder Misfire Detected",ランダム/複数気筒ミスファイア検出,检测到随机/多缸失火
+P0301,"Cylinder 1 Misfire Detected",1 番気筒ミスファイア検出,检测到1缸失火
+P0302,"Cylinder 2 Misfire Detected",2 番気筒ミスファイア検出,检测到2缸失火
+P0303,"Cylinder 3 Misfire Detected",3 番気筒ミスファイア検出,检测到3缸失火
+P0304,"Cylinder 4 Misfire Detected",4 番気筒ミスファイア検出,检测到4缸失火
+P0305,"Cylinder 5 Misfire Detected",5 番気筒ミスファイア検出,检测到5缸失火
+P0306,"Cylinder 6 Misfire Detected",6 番気筒ミスファイア検出,检测到6缸失火
+P0307,"Cylinder 7 Misfire Detected",7 番気筒ミスファイア検出,检测到7缸失火
+P0308,"Cylinder 8 Misfire Detected",8 番気筒ミスファイア検出,检测到8缸失火
+P0325,"Knock Sensor 1 Circuit Malfunction (Bank 1)",ノックセンサー 1 回路異常 (バンク 1),爆震传感器1电路故障 (第1排)
+P0327,"Knock Sensor 1 Circuit Low Input (Bank 1)",ノックセンサー 1 低入力 (バンク 1),爆震传感器1输入低 (第1排)
+P0328,"Knock Sensor 1 Circuit High Input (Bank 1)",ノックセンサー 1 高入力 (バンク 1),爆震传感器1输入高 (第1排)
+P0330,"Knock Sensor 2 Circuit Malfunction (Bank 2)",ノックセンサー 2 回路異常 (バンク 2),爆震传感器2电路故障 (第2排)
+P0335,"Crankshaft Position Sensor A Circuit Malfunction",クランク角センサー A 回路異常,曲轴位置传感器A电路故障
+P0336,"Crankshaft Position Sensor A Circuit Range/Performance",クランク角センサー A 範囲/性能異常,曲轴位置传感器A范围/性能故障
+P0340,"Camshaft Position Sensor A Circuit Malfunction (Bank 1)",カム角センサー A 回路異常 (バンク 1),凸轮轴位置传感器A电路故障 (第1排)
+P0341,"Camshaft Position Sensor A Circuit Range/Performance (Bank 1)",カム角センサー A 範囲/性能異常 (バンク 1),凸轮轴位置传感器A范围/性能故障 (第1排)
+P0345,"Camshaft Position Sensor A Circuit Malfunction (Bank 2)",カム角センサー A 回路異常 (バンク 2),凸轮轴位置传感器A电路故障 (第2排)
+P0350,"Ignition Coil Primary/Secondary Circuit Malfunction",イグニッションコイル一次/二次回路異常,点火线圈初级/次级电路故障
+P0351,"Ignition Coil A Primary/Secondary Circuit",イグニッションコイル A 一次/二次回路,点火线圈A初级/次级电路
+P0352,"Ignition Coil B Primary/Secondary Circuit",イグニッションコイル B 一次/二次回路,点火线圈B初级/次级电路
+P0353,"Ignition Coil C Primary/Secondary Circuit",イグニッションコイル C 一次/二次回路,点火线圈C初级/次级电路
+P0354,"Ignition Coil D Primary/Secondary Circuit",イグニッションコイル D 一次/二次回路,点火线圈D初级/次级电路
+P0400,"Exhaust Gas Recirculation Flow Malfunction",EGR 流量異常,废气再循环流量故障
+P0401,"Exhaust Gas Recirculation Flow Insufficient Detected",EGR 流量不足,废气再循环流量不足
+P0402,"Exhaust Gas Recirculation Flow Excessive Detected",EGR 流量過大,废气再循环流量过大
+P0403,"Exhaust Gas Recirculation Circuit Malfunction",EGR 回路異常,废气再循环电路故障
+P0404,"Exhaust Gas Recirculation Circuit Range/Performance",EGR 回路 範囲/性能異常,废气再循环电路范围/性能故障
+P0410,"Secondary Air Injection System Malfunction",二次空気導入システム異常,二次空气喷射系统故障
+P0411,"Secondary Air Injection System Incorrect Flow Detected",二次空気導入 流量異常,二次空气喷射流量不正确
+P0420,"Catalyst System Efficiency Below Threshold (Bank 1)",触媒効率低下 (バンク 1),催化器效率低于阈值 (第1排)
+P0421,"Warm Up Catalyst Efficiency Below Threshold (Bank 1)",暖機触媒効率低下 (バンク 1),暖机催化器效率低于阈值 (第1排)
+P0430,"Catalyst System Efficiency Below Threshold (Bank 2)",触媒効率低下 (バンク 2),催化器效率低于阈值 (第2排)
+P0431,"Warm Up Catalyst Efficiency Below Threshold (Bank 2)",暖機触媒効率低下 (バンク 2),暖机催化器效率低于阈值 (第2排)
+P0440,"Evaporative Emission Control System Malfunction",蒸発ガス制御システム異常,蒸发排放控制系统故障
+P0441,"Evaporative Emission Control System Incorrect Purge Flow",蒸発ガス パージ流量異常,蒸发排放净化流量不正确
+P0442,"Evaporative Emission Control System Leak Detected (Small Leak)",蒸発ガス系 小リーク検出,蒸发排放系统检测到小泄漏
+P0443,"Evaporative Emission Control System Purge Control Valve Circuit",パージ制御バルブ回路異常,蒸发排放净化控制阀电路
+P0446,"Evaporative Emission Control System Vent Control Circuit",蒸発ガス ベント制御回路異常,蒸发排放通风控制电路
+P0450,"Evaporative Emission Control System Pressure Sensor Malfunction",蒸発ガス圧センサー異常,蒸发排放压力传感器故障
+P0451,"Evaporative Emission Control System Pressure Sensor Range/Performance",蒸発ガス圧センサー 範囲/性能異常,蒸发排放压力传感器范围/性能故障
+P0455,"Evaporative Emission Control System Leak Detected (Gross Leak)",蒸発ガス系 大リーク検出,蒸发排放系统检测到大泄漏
+P0456,"Evaporative Emission Control System Leak Detected (Very Small Leak)",蒸発ガス系 微小リーク検出,蒸发排放系统检测到极小泄漏
+P0457,"Evaporative Emission Control System Leak Detected (Fuel Cap Loose/Off)",蒸発ガス系リーク (給油キャップ緩み),蒸发排放泄漏 (油箱盖松动/缺失)
+P0460,"Fuel Level Sensor Circuit Malfunction",燃料残量センサー回路異常,燃油液位传感器电路故障
+P0461,"Fuel Level Sensor Circuit Range/Performance",燃料残量センサー 範囲/性能異常,燃油液位传感器范围/性能故障
+P0462,"Fuel Level Sensor Circuit Low Input",燃料残量センサー 低入力,燃油液位传感器输入低
+P0463,"Fuel Level Sensor Circuit High Input",燃料残量センサー 高入力,燃油液位传感器输入高
+P0480,"Cooling Fan 1 Control Circuit Malfunction",冷却ファン 1 制御回路異常,冷却风扇1控制电路故障
+P0500,"Vehicle Speed Sensor Malfunction",車速センサー異常,车速传感器故障
+P0501,"Vehicle Speed Sensor Range/Performance",車速センサー 範囲/性能異常,车速传感器范围/性能故障
+P0505,"Idle Control System Malfunction",アイドル制御システム異常,怠速控制系统故障
+P0506,"Idle Control System RPM Lower Than Expected",アイドル回転数 低すぎ,怠速转速低于预期
+P0507,"Idle Control System RPM Higher Than Expected",アイドル回転数 高すぎ,怠速转速高于预期
+P0520,"Engine Oil Pressure Sensor/Switch Circuit Malfunction",油圧センサー/スイッチ回路異常,机油压力传感器/开关电路故障
+P0521,"Engine Oil Pressure Sensor/Switch Range/Performance",油圧センサー/スイッチ 範囲/性能異常,机油压力传感器/开关范围/性能故障
+P0530,"A/C Refrigerant Pressure Sensor Circuit Malfunction",エアコン冷媒圧センサー回路異常,空调制冷剂压力传感器电路故障
+P0532,"A/C Refrigerant Pressure Sensor Circuit Low Input",エアコン冷媒圧センサー 低入力,空调制冷剂压力传感器输入低
+P0533,"A/C Refrigerant Pressure Sensor Circuit High Input",エアコン冷媒圧センサー 高入力,空调制冷剂压力传感器输入高
+P0560,"System Voltage Malfunction",システム電圧異常,系统电压故障
+P0561,"System Voltage Unstable",システム電圧不安定,系统电压不稳定
+P0562,"System Voltage Low",システム電圧低下,系统电压低
+P0563,"System Voltage High",システム電圧過大,系统电压高
+P0571,"Brake Switch A Circuit Malfunction",ブレーキスイッチ A 回路異常,制动开关A电路故障
+P0600,"Serial Communication Link Malfunction",シリアル通信リンク異常,串行通信链路故障
+P0601,"Internal Control Module Memory Check Sum Error",制御モジュール内部メモリ チェックサムエラー,控制模块内部存储器校验和错误
+P0602,"Control Module Programming Error",制御モジュール プログラミングエラー,控制模块编程错误
+P0603,"Internal Control Module Keep Alive Memory (KAM) Error",制御モジュール KAM エラー,控制模块保持存储器错误
+P0604,"Internal Control Module Random Access Memory (RAM) Error",制御モジュール RAM エラー,控制模块随机存储器错误
+P0605,"Internal Control Module Read Only Memory (ROM) Error",制御モジュール ROM エラー,控制模块只读存储器错误
+P0606,"ECM/PCM Processor Fault",ECM/PCM プロセッサー異常,ECM/PCM 处理器故障
+P0607,"Control Module Performance",制御モジュール性能異常,控制模块性能故障
+P0620,"Generator Control Circuit Malfunction",発電機制御回路異常,发电机控制电路故障
+P0630,"VIN Not Programmed or Mismatch - ECM/PCM",VIN 未登録または不一致 - ECM/PCM,VIN 未编程或不匹配 - ECM/PCM
+P0700,"Transmission Control System Malfunction",トランスミッション制御システム異常,变速箱控制系统故障
+P0705,"Transmission Range Sensor Circuit Malfunction (PRNDL Input)",シフトポジションセンサー回路異常,变速箱档位传感器电路故障
+P0710,"Transmission Fluid Temperature Sensor Circuit Malfunction",ATF 温度センサー回路異常,变速箱油温传感器电路故障
+P0711,"Transmission Fluid Temperature Sensor Circuit Range/Performance",ATF 温度センサー 範囲/性能異常,变速箱油温传感器范围/性能故障
+P0715,"Input/Turbine Speed Sensor Circuit Malfunction",入力軸/タービン回転センサー回路異常,输入轴/涡轮转速传感器电路故障
+P0720,"Output Speed Sensor Circuit Malfunction",出力軸回転センサー回路異常,输出轴转速传感器电路故障
+P0725,"Engine Speed Input Circuit Malfunction",エンジン回転入力回路異常,发动机转速输入电路故障
+P0730,"Incorrect Gear Ratio",ギア比異常,档位齿比不正确
+P0731,"Gear 1 Incorrect Ratio",1 速ギア比異常,1档齿比不正确
+P0732,"Gear 2 Incorrect Ratio",2 速ギア比異常,2档齿比不正确
+P0733,"Gear 3 Incorrect Ratio",3 速ギア比異常,3档齿比不正确
+P0734,"Gear 4 Incorrect Ratio",4 速ギア比異常,4档齿比不正确
+P0740,"Torque Converter Clutch Circuit Malfunction",トルコンクラッチ回路異常,变矩器离合器电路故障
+P0741,"Torque Converter Clutch Circuit Performance or Stuck Off",トルコンクラッチ 性能異常/オフ固着,变矩器离合器性能故障或卡在关闭位置
+P0750,"Shift Solenoid A Malfunction",シフトソレノイド A 異常,换档电磁阀A故障
+P0755,"Shift Solenoid B Malfunction",シフトソレノイド B 異常,换档电磁阀B故障
+P0760,"Shift Solenoid C Malfunction",シフトソレノイド C 異常,换档电磁阀C故障
+P0765,"Shift Solenoid D Malfunction",シフトソレノイド D 異常,换档电磁阀D故障
+P0780,"Shift Malfunction",シフト異常,换档故障
+P0A0F,"Engine Failed to Start",エンジン始動不能,发动机启动失败
+P0A1A,"Generator Control Module",ジェネレーター制御モジュール異常,发电机控制模块故障
+P0A1B,"Drive Motor A Control Module",駆動モーター A 制御モジュール異常,驱动电机A控制模块故障
+P0A3F,"Drive Motor A Position Sensor Circuit",駆動モーター A 位置センサー回路,驱动电机A位置传感器电路
+P0A7A,"Generator Inverter Performance",ジェネレーターインバーター性能異常,发电机逆变器性能故障
+P0A7F,"Hybrid Battery Pack Deterioration",ハイブリッドバッテリー劣化,混合动力电池组老化
+P0A80,"Replace Hybrid Battery Pack",ハイブリッドバッテリー要交換,更换混合动力电池组
+P0A93,"Inverter A Cooling System Performance",インバーター A 冷却系性能異常,逆变器A冷却系统性能故障
+P0A94,"DC/DC Converter Performance",DC/DC コンバーター性能異常,DC/DC 转换器性能故障
+P0A95,"High Voltage Fuse",高電圧ヒューズ異常,高压保险丝故障
+P0AA6,"Hybrid Battery Voltage System Isolation Fault",ハイブリッドバッテリー絶縁異常,混合动力电池电压系统绝缘故障
+P0AC0,"Hybrid Battery Pack Current Sensor",ハイブリッドバッテリー電流センサー異常,混合动力电池组电流传感器故障
+P0AFA,"Hybrid Battery System Voltage Low",ハイブリッドバッテリー電圧低下,混合动力电池系统电压低
+P2100,"Throttle Actuator Control Motor Circuit/Open",スロットルアクチュエーターモーター回路断線,节气门执行器电机电路/断路
+P2101,"Throttle Actuator Control Motor Circuit Range/Performance",スロットルアクチュエーターモーター 範囲/性能異常,节气门执行器电机电路范围/性能故障
+P2102,"Throttle Actuator Control Motor Circuit Low",スロットルアクチュエーターモーター回路 低,节气门执行器电机电路低
+P2103,"Throttle Actuator Control Motor Circuit High",スロットルアクチュエーターモーター回路 高,节气门执行器电机电路高
+P2111,"Throttle Actuator Control System - Stuck Open",スロットル 開固着,节气门执行器控制系统 - 卡在打开位置
+P2112,"Throttle Actuator Control System - Stuck Closed",スロットル 閉固着,节气门执行器控制系统 - 卡在关闭位置
+P2118,"Throttle Actuator Control Motor Current Range/Performance",スロットルモーター電流 範囲/性能異常,节气门执行器电机电流范围/性能故障
+P2119,"Throttle Actuator Control Throttle Body Range/Performance",スロットルボディ 範囲/性能異常,节气门体范围/性能故障
+P2120,"Throttle/Pedal Position Sensor D Circuit",スロットル/ペダル位置センサー D 回路,节气门/踏板位置传感器D电路
+P2121,"Throttle/Pedal Position Sensor D Circuit Range/Performance",スロットル/ペダル位置センサー D 範囲/性能異常,节气门/踏板位置传感器D范围/性能故障
+P2122,"Throttle/Pedal Position Sensor D Circuit Low Input",スロットル/ペダル位置センサー D 低入力,节气门/踏板位置传感器D输入低
+P2123,"Throttle/Pedal Position Sensor D Circuit High Input",スロットル/ペダル位置センサー D 高入力,节气门/踏板位置传感器D输入高
+P2125,"Throttle/Pedal Position Sensor E Circuit",スロットル/ペダル位置センサー E 回路,节气门/踏板位置传感器E电路
+P2127,"Throttle/Pedal Position Sensor E Circuit Low Input",スロットル/ペダル位置センサー E 低入力,节气门/踏板位置传感器E输入低
+P2128,"Throttle/Pedal Position Sensor E Circuit High Input",スロットル/ペダル位置センサー E 高入力,节气门/踏板位置传感器E输入高
+P2135,"Throttle/Pedal Position Sensor A/B Voltage Correlation",スロットル/ペダル位置センサー A/B 電圧相関異常,节气门/踏板位置传感器A/B电压相关性
+P2138,"Throttle/Pedal Position Sensor D/E Voltage Correlation",スロットル/ペダル位置センサー D/E 電圧相関異常,节气门/踏板位置传感器D/E电压相关性
+P2195,"O2 Sensor Signal Biased/Stuck Lean (Bank 1 Sensor 1)",O2 センサー リーン固着 (バンク 1 センサー 1),氧传感器信号偏稀/卡滞 (第1排传感器1)
+P2196,"O2 Sensor Signal Biased/Stuck Rich (Bank 1 Sensor 1)",O2 センサー リッチ固着 (バンク 1 センサー 1),氧传感器信号偏浓/卡滞 (第1排传感器1)
+P2237,"O2 Sensor Positive Current Control Circuit/Open (Bank 1 Sensor 1)",O2 センサー正電流制御回路断線 (バンク 1 センサー 1),氧传感器正电流控制电路断路 (第1排传感器1)
+P2238,"O2 Sensor Positive Current Control Circuit Low (Bank 1 Sensor 1)",O2 センサー正電流制御回路 低 (バンク 1 センサー 1),氧传感器正电流控制电路低 (第1排传感器1)
+P2270,"O2 Sensor Signal Biased/Stuck Lean (Bank 1 Sensor 2)",O2 センサー リーン固着 (バンク 1 センサー 2),氧传感器信号偏稀/卡滞 (第1排传感器2)
+P2271,"O2 Sensor Signal Biased/Stuck Rich (Bank 1 Sensor 2)",O2 センサー リッチ固着 (バンク 1 センサー 2),氧传感器信号偏浓/卡滞 (第1排传感器2)
+P2400,"Evaporative Emission System Leak Detection Pump Control Circuit/Open",蒸発ガス リーク検出ポンプ制御回路断線,蒸发排放泄漏检测泵控制电路断路
+P2401,"Evaporative Emission System Leak Detection Pump Control Circuit Low",蒸発ガス リーク検出ポンプ制御回路 低,蒸发排放泄漏检测泵控制电路低
+P2402,"Evaporative Emission System Leak Detection Pump Control Circuit High",蒸発ガス リーク検出ポンプ制御回路 高,蒸发排放泄漏检测泵控制电路高
+P2419,"Evaporative Emission System Switching Valve Control Circuit Low",蒸発ガス 切替バルブ制御回路 低,蒸发排放切换阀控制电路低
+P2610,"ECM/PCM Internal Engine Off Timer Performance",ECM/PCM 内部エンジン停止タイマー異常,ECM/PCM 内部发动机关闭计时器性能故障
+P3000,"HV Battery Malfunction",HV バッテリー異常,高压电池故障
+P3190,"Poor Engine Power",エンジン出力不足,发动机动力不足
+P3191,"Engine Does Not Start",エンジン始動せず,发动机无法启动
+B0001,"Driver Frontal Stage 1 Deployment Control",運転席前面エアバッグ 1 段目展開制御,驾驶员正面气囊第一级展开控制
+B0002,"Driver Frontal Stage 2 Deployment Control",運転席前面エアバッグ 2 段目展開制御,驾驶员正面气囊第二级展开控制
+B0010,"Passenger Frontal Stage 1 Deployment Control",助手席前面エアバッグ 1 段目展開制御,乘客正面气囊第一级展开控制
+B0011,"Passenger Frontal Stage 2 Deployment Control",助手席前面エアバッグ 2 段目展開制御,乘客正面气囊第二级展开控制
+B0020,"Left Side Airbag Deployment Control",左サイドエアバッグ展開制御,左侧气囊展开控制
+B0021,"Right Side Airbag Deployment Control",右サイドエアバッグ展開制御,右侧气囊展开控制
+B0028,"Left Curtain Airbag Deployment Control",左カーテンエアバッグ展開制御,左侧帘式气囊展开控制
+B0029,"Right Curtain Airbag Deployment Control",右カーテンエアバッグ展開制御,右侧帘式气囊展开控制
+B0050,"Driver Seat Belt Pretensioner Deployment Control",運転席シートベルトプリテンショナー展開制御,驾驶员安全带预紧器展开控制
+B0051,"Passenger Seat Belt Pretensioner Deployment Control",助手席シートベルトプリテンショナー展開制御,乘客安全带预紧器展开控制
+B0081,"Passenger Seat Occupant Detection",助手席乗員検知異常,乘客座椅乘员检测
+B0100,"Front Impact Sensor Left",左フロントインパクトセンサー異常,左前碰撞传感器
+B0101,"Front Impact Sensor Right",右フロントインパクトセンサー異常,右前碰撞传感器
+B0102,"Side Impact Sensor Left",左サイドインパクトセンサー異常,左侧碰撞传感器
+B0103,"Side Impact Sensor Right",右サイドインパクトセンサー異常,右侧碰撞传感器
+B1000,"Airbag ECU Malfunction",エアバッグ ECU 異常,安全气囊 ECU 故障
+B1150,"Occupant Classification System Malfunction",乗員判別システム異常,乘员分类系统故障
+B1421,"Solar Sensor Circuit (Passenger Side)",日射センサー回路 (助手席側),阳光传感器电路 (乘客侧)
+B1424,"Solar Sensor Circuit (Driver Side)",日射センサー回路 (運転席側),阳光传感器电路 (驾驶员侧)
+B1431,"Room Temperature Sensor Circuit",室温センサー回路,车内温度传感器电路
+B1441,"Ambient Temperature Sensor Circuit",外気温センサー回路,环境温度传感器电路
+B1451,"Evaporator Temperature Sensor Circuit",エバポレーター温度センサー回路,蒸发器温度传感器电路
+B2401,"Power Window Master Switch Malfunction",パワーウィンドウマスタースイッチ異常,电动车窗主开关故障
+B2799,"Engine Immobiliser System Malfunction",イモビライザーシステム異常,发动机防盗系统故障
+C0035,"Left Front Wheel Speed Sensor Circuit",左前輪速センサー回路,左前轮速传感器电路
+C0040,"Right Front Wheel Speed Sensor Circuit",右前輪速センサー回路,右前轮速传感器电路
+C0045,"Left Rear Wheel Speed Sensor Circuit",左後輪速センサー回路,左后轮速传感器电路
+C0050,"Right Rear Wheel Speed Sensor Circuit",右後輪速センサー回路,右后轮速传感器电路
+C0051,"Steering Wheel Position Sensor Circuit",ステアリング角センサー回路,方向盘位置传感器电路
+C0110,"Pump Motor Circuit",ポンプモーター回路,泵电机电路
+C0121,"Valve Relay Circuit",バルブリレー回路,阀继电器电路
+C0161,"ABS/TCS Brake Switch Circuit",ABS/TCS ブレーキスイッチ回路,ABS/TCS 制动开关电路
+C0200,"Right Front Wheel Speed Sensor Circuit Malfunction",右前輪速センサー回路異常,右前轮速传感器电路故障
+C0205,"Left Front Wheel Speed Sensor Circuit Malfunction",左前輪速センサー回路異常,左前轮速传感器电路故障
+C0210,"Right Rear Wheel Speed Sensor Circuit Malfunction",右後輪速センサー回路異常,右后轮速传感器电路故障
+C0215,"Left Rear Wheel Speed Sensor Circuit Malfunction",左後輪速センサー回路異常,左后轮速传感器电路故障
+C0226,"Left Front ABS Solenoid Circuit",左前 ABS ソレノイド回路,左前 ABS 电磁阀电路
+C0236,"Right Front ABS Solenoid Circuit",右前 ABS ソレノイド回路,右前 ABS 电磁阀电路
+C0246,"Left Rear ABS Solenoid Circuit",左後 ABS ソレノイド回路,左后 ABS 电磁阀电路
+C0256,"Right Rear ABS Solenoid Circuit",右後 ABS ソレノイド回路,右后 ABS 电磁阀电路
+C1201,"Engine Control System Malfunction (ABS)",エンジン制御システム異常 (ABS),发动机控制系统故障 (ABS)
+C1210,"Zero Point Calibration of Yaw Rate Sensor Undone",ヨーレートセンサー ゼロ点未校正,横摆率传感器零点未校准
+C1223,"ABS Control System Malfunction",ABS 制御システム異常,ABS 控制系统故障
+C1231,"Steering Angle Sensor Circuit Malfunction",ステアリング角センサー回路異常,转向角传感器电路故障
+C1232,"Deceleration Sensor Stuck",減速度センサー固着,减速度传感器卡滞
+C1241,"Low or High Power Supply Voltage",電源電圧 低/高,电源电压低或高
+C1249,"Open in Stop Light Switch Circuit",ストップランプスイッチ回路断線,制动灯开关电路断路
+C1251,"Pump Motor Lock",ポンプモーター ロック,泵电机锁死
+C1256,"Accumulator Low Pressure",アキュムレーター低圧,蓄压器压力低
+C1290,"Yaw Rate Sensor Malfunction",ヨーレートセンサー異常,横摆率传感器故障
+C1336,"Zero Point Calibration of Deceleration Sensor Undone",減速度センサー ゼロ点未校正,减速度传感器零点未校准
+C1345,"Linear Solenoid Offset Learning Undone",リニアソレノイド オフセット未学習,线性电磁阀偏移未学习
+C1381,"Steering Angle Sensor Zero Point Not Set",ステアリング角センサー ゼロ点未設定,转向角传感器零点未设定
+C1511,"Torque Sensor Malfunction (EPS)",トルクセンサー異常 (EPS),扭矩传感器故障 (EPS)
+C1516,"Torque Sensor Zero Point Adjustment Incomplete",トルクセンサー ゼロ点調整未完了,扭矩传感器零点调整未完成
+C1524,"Motor Malfunction (EPS)",モーター異常 (EPS),电机故障 (EPS)
+C1531,"ECU Malfunction (EPS)",ECU 異常 (EPS),ECU 故障 (EPS)
+C1554,"Power Supply Relay Failure (EPS)",電源リレー異常 (EPS),电源继电器故障 (EPS)
+C2121,"Tire Pressure Monitor ID Not Registered",タイヤ空気圧センサー ID 未登録,胎压监测 ID 未注册
+C2122,"Tire Pressure Monitor Low Pressure Warning (Front Left)",タイヤ空気圧低下警告 (左前),胎压过低警告 (左前)
+C2123,"Tire Pressure Monitor Low Pressure Warning (Front Right)",タイヤ空気圧低下警告 (右前),胎压过低警告 (右前)
+C2124,"Tire Pressure Monitor Low Pressure Warning (Rear Right)",タイヤ空気圧低下警告 (右後),胎压过低警告 (右后)
+C2125,"Tire Pressure Monitor Low Pressure Warning (Rear Left)",タイヤ空気圧低下警告 (左後),胎压过低警告 (左后)
+C2126,"Tire Pressure Monitor Low Pressure Warning",タイヤ空気圧低下警告,胎压过低警告
+C2141,"Tire Pressure Monitor Transmitter Malfunction (Front Left)",タイヤ空気圧センサー異常 (左前),胎压发射器故障 (左前)
+C2142,"Tire Pressure Monitor Transmitter Malfunction (Front Right)",タイヤ空気圧センサー異常 (右前),胎压发射器故障 (右前)
+C2176,"Tire Pressure Monitor Receiver Malfunction",タイヤ空気圧受信機異常,胎压监测接收器故障
+C2177,"Tire Pressure Monitor Receiver Power Supply Malfunction",タイヤ空気圧受信機 電源異常,胎压监测接收器电源故障
+U0001,"High Speed CAN Communication Bus",高速 CAN 通信バス異常,高速 CAN 通信总线
+U0100,"Lost Communication With ECM/PCM A",ECM/PCM A との通信途絶,与 ECM/PCM A 通信丢失
+U0101,"Lost Communication With TCM",TCM との通信途絶,与 TCM 通信丢失
+U0102,"Lost Communication With Transfer Case Control Module",トランスファー制御モジュールとの通信途絶,与分动箱控制模块通信丢失
+U0103,"Lost Communication With Gear Shift Module",シフトモジュールとの通信途絶,与换档模块通信丢失
+U0104,"Lost Communication With Cruise Control Module",クルーズ制御モジュールとの通信途絶,与巡航控制模块通信丢失
+U0110,"Lost Communication With Drive Motor Control Module",駆動モーター制御モジュールとの通信途絶,与驱动电机控制模块通信丢失
+U0111,"Lost Communication With Battery Energy Control Module",バッテリー制御モジュールとの通信途絶,与电池能量控制模块通信丢失
+U0121,"Lost Communication With ABS Control Module",ABS 制御モジュールとの通信途絶,与 ABS 控制模块通信丢失
+U0122,"Lost Communication With Vehicle Dynamics Control Module",車両挙動制御モジュールとの通信途絶,与车辆动态控制模块通信丢失
+U0123,"Lost Communication With Yaw Rate Sensor Module",ヨーレートセンサーとの通信途絶,与横摆率传感器模块通信丢失
+U0124,"Lost Communication With Lateral Acceleration Sensor Module",横加速度センサーとの通信途絶,与横向加速度传感器模块通信丢失
+U0126,"Lost Communication With Steering Angle Sensor Module",ステアリング角センサーとの通信途絶,与转向角传感器模块通信丢失
+U0129,"Lost Communication With Brake System Control Module",ブレーキ制御モジュールとの通信途絶,与制动系统控制模块通信丢失
+U0131,"Lost Communication With Power Steering Control Module",パワーステアリング制御モジュールとの通信途絶,与助力转向控制模块通信丢失
+U0140,"Lost Communication With Body Control Module",ボディ制御モジュールとの通信途絶,与车身控制模块通信丢失
+U0141,"Lost Communication With Body Control Module A",ボディ制御モジュール A との通信途絶,与车身控制模块A通信丢失
+U0151,"Lost Communication With Restraints Control Module",エアバッグ制御モジュールとの通信途絶,与约束系统控制模块通信丢失
+U0155,"Lost Communication With Instrument Panel Cluster",メーターとの通信途絶,与仪表盘通信丢失
+U0156,"Lost Communication With Information Center A",インフォメーションセンター A との通信途絶,与信息中心A通信丢失
+U0164,"Lost Communication With HVAC Control Module",エアコン制御モジュールとの通信途絶,与空调控制模块通信丢失
+U0167,"Lost Communication With Vehicle Immobilizer Control Module",イモビライザー制御モジュールとの通信途絶,与防盗控制模块通信丢失
+U0184,"Lost Communication With Radio",オーディオとの通信途絶,与收音机通信丢失
+U0197,"Lost Communication With Telephone Control Module",電話制御モジュールとの通信途絶,与电话控制模块通信丢失
+U0199,"Lost Communication With Door Control Module A",ドア制御モジュール A との通信途絶,与车门控制模块A通信丢失
+U0293,"Lost Communication With Hybrid Powertrain Control Module",ハイブリッド制御モジュールとの通信途絶,与混合动力控制模块通信丢失
+U0401,"Invalid Data Received From ECM/PCM",ECM/PCM からの無効データ受信,从 ECM/PCM 接收到无效数据
+U0402,"Invalid Data Received From TCM",TCM からの無効データ受信,从 TCM 接收到无效数据
+U0415,"Invalid Data Received From ABS Control Module",ABS 制御モジュールからの無効データ受信,从 ABS 控制模块接收到无效数据
+U0422,"Invalid Data Received From Body Control Module",ボディ制御モジュールからの無効データ受信,从车身控制模块接收到无效数据
+U0423,"Invalid Data Received From Instrument Panel Cluster",メーターからの無効データ受信,从仪表盘接收到无效数据
+U1000,"CAN Communication Bus Malfunction",CAN 通信バス異常,CAN 通信总线故障
+U1001,"CAN Communication Bus Malfunction (ECM)",CAN 通信バス異常 (ECM),CAN 通信总线故障 (ECM)
+U1100,"Lost Communication With Central Gateway",セントラルゲートウェイとの通信途絶,与中央网关通信丢失
+U0073,"Control Module Communication Bus Off",制御モジュール通信バス オフ,控制模块通信总线关闭
+U0074,"Control Module Communication Bus B Off",制御モジュール通信バス B オフ,控制模块通信总线B关闭
+U0146,"Lost Communication With Gateway A",ゲートウェイ A との通信途絶,与网关A通信丢失
+U0235,"Lost Communication With Cruise Control Front Distance Range Sensor",前方距離センサーとの通信途絶,与巡航前方距离传感器通信丢失
+U3000,"Control Module Internal Malfunction",制御モジュール内部異常,控制模块内部故障
+U3003,"Battery Voltage Out of Range",バッテリー電圧範囲外,电池电压超出范围

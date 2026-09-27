@@ -1,0 +1,22 @@
+id,short,name_en,name_ja,name_zh,req,resp,x,y,z,icon
+1,ECM,Engine Control Module,エンジン制御モジュール,发动机控制模块,7E0,7E8,1.55,0.72,-0.35,engine
+2,TCM,Transmission Control,トランスミッション制御,变速箱控制模块,7E1,7E9,1.05,0.48,0.25,transmission
+3,ABS,ABS Module,ABS モジュール,ABS 模块,7B0,7B8,1.35,0.66,0.62,abs
+4,SRS,Airbag Module,エアバッグモジュール,安全气囊模块,780,788,0.20,0.55,0.00,airbag
+5,BCM,Body Control Module,ボディ制御モジュール,车身控制模块,750,758,0.95,0.78,-0.55,body
+6,TPMS,Tire Pressure Monitoring,タイヤ空気圧監視,胎压监测,7A0,7A8,-1.95,0.60,0.40,tpms
+7,HVAC,Climate Control,エアコン制御,空调控制,7C4,7CC,0.95,0.70,0.05,hvac
+8,EPS,Electric Power Steering,電動パワーステアリング,电动助力转向,7A1,7A9,1.05,0.42,-0.45,steering
+9,IPC,Instrument Cluster,メーターパネル,仪表盘,7C0,7C8,0.90,0.98,-0.40,cluster
+10,GTW,Central Gateway,セントラルゲートウェイ,中央网关,7D0,7D8,0.55,0.50,0.35,gateway
+11,HV,Hybrid Control Module,ハイブリッド制御,混合动力控制,7E2,7EA,-1.00,0.45,0.00,hybrid
+12,BMS,Battery Management,バッテリー管理,电池管理系统,7E3,7EB,-1.80,0.50,-0.30,battery
+13,PCS,Pre-Collision System,プリクラッシュシステム,预碰撞系统,7A2,7AA,2.30,0.60,0.00,radar
+14,PKB,Electric Parking Brake,電動パーキングブレーキ,电子驻车制动,7B1,7B9,-1.40,0.40,0.50,brake
+15,SMK,Smart Key System,スマートキー,智能钥匙系统,7B2,7BA,0.45,0.72,-0.30,key
+16,MID,Multimedia Module,マルチメディア,多媒体模块,7D1,7D9,0.85,0.88,0.15,media
+17,TEL,Telematics Unit,テレマティクス,远程信息处理,7D2,7DA,-0.50,1.35,0.00,telematics
+18,SCU,Seat Control Module,シート制御,座椅控制模块,7D3,7DB,0.00,0.38,-0.45,seat
+19,LCM,Lighting Control,ライト制御,灯光控制,7D4,7DC,2.05,0.78,0.55,light
+20,PDM,Door Control Module,ドア制御,车门控制模块,7D5,7DD,0.30,0.80,-0.88,door
+21,AFS,Adaptive Front Lighting,アダプティブライト,自适应前照灯,7D6,7DE,2.10,0.70,-0.60,light
