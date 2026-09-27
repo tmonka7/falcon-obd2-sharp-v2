@@ -18,6 +18,7 @@ namespace RedlineDiagnostics.Forms
         private readonly TopBar _topBar;
         private readonly SideNav _nav;
         private readonly Panel _host;
+        private readonly Panel _canvas;
         private readonly BasePage[] _pages;
         private int _current = -1;
 
@@ -29,8 +30,7 @@ namespace RedlineDiagnostics.Forms
             FormBorderStyle = FormBorderStyle.None;
             StartPosition = FormStartPosition.Manual;
             ClientSize = new Size(DesignWidth, DesignHeight);
-            MinimumSize = MaximumSize = Size;
-            BackColor = Theme.Background;
+            BackColor = Color.Black;
             AutoScaleMode = AutoScaleMode.None;
             DoubleBuffered = true;
             KeyPreview = true;
@@ -63,9 +63,13 @@ namespace RedlineDiagnostics.Forms
                 p.TitleChanged += UpdateTitle;
                 _host.Controls.Add(p);
             }
-            Controls.Add(_host);
-            Controls.Add(_nav);
-            Controls.Add(_topBar);
+            // Fixed 1366x768 design canvas. In full-screen mode the form covers the whole display and the
+            // canvas is centred on a black backdrop, so the layout is identical on every screen size.
+            _canvas = new Panel { Bounds = new Rectangle(0, 0, DesignWidth, DesignHeight), BackColor = Theme.Background };
+            _canvas.Controls.Add(_host);
+            _canvas.Controls.Add(_nav);
+            _canvas.Controls.Add(_topBar);
+            Controls.Add(_canvas);
 
             var st0 = AppState.Instance;
             st0.ConnectionChanged += () => { UpdateTitle(); _topBar.Invalidate(); };
@@ -96,7 +100,7 @@ namespace RedlineDiagnostics.Forms
         {
             var st = AppState.Instance;
             st.Settings.Adapter = Obd.AdapterType.Simulator;
-            TopMost = false;
+            PositionWindow();
             Location = new Point(Screen.PrimaryScreen.Bounds.Right + 20, 0);
             System.IO.Directory.CreateDirectory(AutoTestDir);
             st.ConnectAsync();
@@ -107,9 +111,9 @@ namespace RedlineDiagnostics.Forms
             {
                 try
                 {
-                    using (var bmp = new Bitmap(Width, Height))
+                    using (var bmp = new Bitmap(DesignWidth, DesignHeight))
                     {
-                        DrawToBitmap(bmp, new Rectangle(0, 0, Width, Height));
+                        _canvas.DrawToBitmap(bmp, new Rectangle(0, 0, DesignWidth, DesignHeight));
                         // DrawToBitmap paints nested children back-to-front incorrectly; re-paint the page's buttons on top.
                         if (_current >= 0)
                         {
@@ -174,16 +178,30 @@ namespace RedlineDiagnostics.Forms
         private void PositionWindow()
         {
             var screen = Screen.PrimaryScreen.Bounds;
-            if (AppState.Instance.Settings.FullScreen)
+            bool full = AppState.Instance.Settings.FullScreen && string.IsNullOrEmpty(AutoTestDir);
+            MinimumSize = MaximumSize = Size.Empty;
+            if (full)
             {
-                Location = new Point(screen.X + Math.Max(0, (screen.Width - DesignWidth) / 2), screen.Y + Math.Max(0, (screen.Height - DesignHeight) / 2));
-                TopMost = screen.Width == DesignWidth && screen.Height == DesignHeight;
+                // A borderless window that exactly covers the monitor is treated by Windows as a
+                // full-screen application: the taskbar drops behind it without needing TopMost.
+                Bounds = screen;
+                _canvas.Location = new Point(Math.Max(0, (Width - DesignWidth) / 2), Math.Max(0, (Height - DesignHeight) / 2));
             }
             else
             {
+                ClientSize = new Size(DesignWidth, DesignHeight);
                 Location = new Point(screen.X + Math.Max(0, (screen.Width - DesignWidth) / 2), screen.Y + Math.Max(0, (screen.Height - DesignHeight) / 2));
-                TopMost = false;
+                _canvas.Location = Point.Empty;
             }
+            MinimumSize = MaximumSize = Size;
+            TopMost = false;
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            if (_canvas != null)
+                _canvas.Location = new Point(Math.Max(0, (Width - DesignWidth) / 2), Math.Max(0, (Height - DesignHeight) / 2));
         }
 
         private void OnPageNavigate(int index)

@@ -32,12 +32,36 @@ The executable has no runtime dependencies beyond .NET Framework 4.7.
 
 ## Running
 
-* The window is borderless 1366 × 768 (true full screen on a 1366 × 768 display, centred otherwise).
-  `F11` toggles the full-screen flag, `Esc` returns Home / exits, `F1`–`F8` jump to pages.
+* **Full screen** (default): the borderless window covers the entire primary display, so the taskbar is hidden.
+  The layout is a fixed 1366 × 768 canvas: it fills a 1366 × 768 screen exactly and is centred on a black
+  backdrop on larger screens. `F11` switches between full screen and a 1366 × 768 window (also in
+  Settings → Display), `Esc` returns Home / exits, `F1`–`F8` jump to pages.
 * On first start the **Simulator** adapter is selected and connects automatically; press **Full System Scan**.
 * Real hardware: open **Settings**, pick the adapter type, COM port / baud (Bluetooth SPP adapters
   appear as COM ports) or WiFi host, optionally force a protocol, then **Test Connection**.
 * Language: click **EN / 日本語 / 中文** in the top bar.
+
+### Supported OBD-II adapters
+
+The application talks the ELM327 AT command set, which covers the large majority of consumer OBD-II dongles.
+The adapter must present itself to Windows as a **serial port** or a **TCP socket**:
+
+| Adapter | How it appears | Settings |
+| --- | --- | --- |
+| ELM327 USB (FTDI / CH340 / CP210x clones, OBDLink SX, Vgate, Konnwei…) | COM port | `ELM327 USB`, pick the COM port and baud (38400 default; 115200 / 500000 for fast clones and STN devices) |
+| ELM327 Bluetooth Classic (SPP profile: Vgate iCar Pro BT3.0/4.0 in SPP mode, Veepeak BT, KIWI 3 BT, most cheap BT dongles) | COM port created when paired in Windows Bluetooth settings | `ELM327 Bluetooth`, pick the outgoing COM port |
+| ELM327 WiFi (Vgate iCar WiFi, KIWI WiFi, Carista WiFi…) | TCP server, usually `192.168.0.10:35000` | `ELM327 WiFi`, host and port |
+| OBDLink MX+, EX, LX, SX (STN11xx / STN22xx) | COM port (USB or Bluetooth) | `OBDLink MX+ / SX`; STN extensions (`ST` commands) are used when available |
+
+Every vehicle-side protocol an ELM327 offers is supported: SAE J1850 PWM and VPW, ISO 9141-2, ISO 14230-4 KWP2000
+(slow and fast init) and ISO 15765-4 CAN (11 / 29-bit, 250 / 500 kbps), auto-detected or forced in Settings.
+Manufacturer-specific modules (ABS, SRS, BCM, …) are reached through UDS on CAN vehicles; on pre-CAN vehicles only
+the modules that answer the standard J1979 requests (ECM / TCM) are reported.
+
+Not supported: Bluetooth Low Energy-only adapters (OBDLink CX, Veepeak BLE+, most iOS-oriented dongles), SAE J2534
+pass-thru interfaces (Tactrix, Drew Tech, OEM interfaces), proprietary scan tools (Autel, Launch) and raw CAN interfaces
+(PCAN, Kvaser, SocketCAN). The transport layer is an interface (`IObdTransport`), so a further device type only needs a
+new transport class plus an entry in `AdapterType`.
 
 ### Automated UI check
 
