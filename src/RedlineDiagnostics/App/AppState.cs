@@ -53,10 +53,16 @@ namespace RedlineDiagnostics.App
         public bool IsConnected => Connection == ConnectionState.Connected && Adapter != null;
         public bool IsScanning => Scan != null && Scan.IsRunning;
 
-        public void Initialize()
+        /// <summary>Loads settings and applies the saved language (cheap; done before the splash screen appears).</summary>
+        public void LoadSettings()
         {
             Settings = Settings.Load();
             Loc.Current = Loc.FromCode(Settings.Language);
+        }
+
+        public void Initialize()
+        {
+            LoadSettings();
             DtcDatabase.Load();
             PidDatabase.Load();
             ModuleCatalog.Load();

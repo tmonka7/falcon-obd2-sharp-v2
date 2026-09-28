@@ -16,16 +16,41 @@ namespace RedlineDiagnostics
             Application.ThreadException += (s, e) => ShowFatal(e.Exception);
             AppDomain.CurrentDomain.UnhandledException += (s, e) => ShowFatal(e.ExceptionObject as Exception);
 
-            AppState.Instance.Initialize();
             var args = Environment.GetCommandLineArgs();
-            string autoTestDir = null, renderDir = null;
-            bool quick = false;
+            string autoTestDir = null, renderDir = null, splashDir = null;
+            bool quick = false, startup = false;
             for (int i = 1; i < args.Length - 1; i++)
             {
                 if (string.Equals(args[i], "--autotest", StringComparison.OrdinalIgnoreCase)) autoTestDir = args[i + 1];
                 if (string.Equals(args[i], "--autotest-home", StringComparison.OrdinalIgnoreCase)) { autoTestDir = args[i + 1]; quick = true; }
                 if (string.Equals(args[i], "--render-cars", StringComparison.OrdinalIgnoreCase)) renderDir = args[i + 1];
+                if (string.Equals(args[i], "--autotest-splash", StringComparison.OrdinalIgnoreCase)) splashDir = args[i + 1];
+                if (string.Equals(args[i], "--autotest-startup", StringComparison.OrdinalIgnoreCase)) { splashDir = args[i + 1]; startup = true; }
             }
+
+            if (autoTestDir == null && renderDir == null)
+            {
+                // Normal start: the splash screen performs the loading, then hands over to the main window.
+                AppState.Instance.LoadSettings();
+                var ctx = new ApplicationContext();
+                var splash = new SplashForm { AutoTestDir = splashDir, AutoTestContinue = startup };
+                MainForm main = null;
+                splash.Finished += () =>
+                {
+                    // --autotest-startup: continue off-screen into the quick Home capture to check the hand-over.
+                    main = startup ? new MainForm { AutoTestDir = splashDir, AutoTestQuick = true } : new MainForm();
+                    main.FormClosed += (s, e) => ctx.ExitThread();
+                    main.Show();
+                    main.Activate();
+                    splash.Close();
+                };
+                splash.FormClosed += (s, e) => { if (main == null) ctx.ExitThread(); };
+                splash.Show();
+                Application.Run(ctx);
+                return;
+            }
+
+            AppState.Instance.Initialize();
             if (renderDir != null)
             {
                 // Debug aid: writes the cached car "product shots" to PNG files and exits.
@@ -50,7 +75,7 @@ namespace RedlineDiagnostics
                     using (var bg = new System.Drawing.Bitmap(bmp.Width, bmp.Height))
                     using (var g = System.Drawing.Graphics.FromImage(bg))
                     {
-                        g.Clear(System.Drawing.Color.FromArgb(16, 18, 30));
+                        g.Clear(System.Drawing.Color.Black);
                         g.DrawImage(bmp, 0, 0);
                         bg.Save(System.IO.Path.Combine(renderDir, kv.Key + ".png"), System.Drawing.Imaging.ImageFormat.Png);
                     }
@@ -62,6 +87,14 @@ namespace RedlineDiagnostics
         private static void ShowFatal(Exception ex)
         {
             if (ex == null) return;
+            try
+            {
+                // Keep a record even when the dialog is dismissed (or no one is watching an automated run).
+                var dir = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "RedlineDiagnostics");
+                System.IO.Directory.CreateDirectory(dir);
+                System.IO.File.AppendAllText(System.IO.Path.Combine(dir, "crash.log"), DateTime.Now.ToString("s") + "  " + ex + Environment.NewLine + Environment.NewLine);
+            }
+            catch { }
             try
             {
                 MessageBox.Show(ex.ToString(), "Redline Diagnostics", MessageBoxButtons.OK, MessageBoxIcon.Error);

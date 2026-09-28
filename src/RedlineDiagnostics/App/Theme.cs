@@ -11,14 +11,14 @@ namespace RedlineDiagnostics.App
     public static class Theme
     {
         // Backgrounds
-        public static readonly Color Background = ColorTranslator.FromHtml("#0A0E1A");
-        public static readonly Color Surface = ColorTranslator.FromHtml("#10162A");
-        public static readonly Color SurfaceAlt = ColorTranslator.FromHtml("#141B33");
-        public static readonly Color Card = ColorTranslator.FromHtml("#0E1428");
-        public static readonly Color Border = ColorTranslator.FromHtml("#232C47");
-        public static readonly Color BorderSoft = ColorTranslator.FromHtml("#1A2138");
-        public static readonly Color TopBar = ColorTranslator.FromHtml("#0C1122");
-        public static readonly Color Sidebar = ColorTranslator.FromHtml("#0C1122");
+        public static readonly Color Background = ColorTranslator.FromHtml("#000000");
+        public static readonly Color Surface = ColorTranslator.FromHtml("#0E0E10");
+        public static readonly Color SurfaceAlt = ColorTranslator.FromHtml("#17171A");
+        public static readonly Color Card = ColorTranslator.FromHtml("#0A0A0C");
+        public static readonly Color Border = ColorTranslator.FromHtml("#2A2A2F");
+        public static readonly Color BorderSoft = ColorTranslator.FromHtml("#1D1D21");
+        public static readonly Color TopBar = ColorTranslator.FromHtml("#060607");
+        public static readonly Color Sidebar = ColorTranslator.FromHtml("#060607");
 
         // Accents
         public static readonly Color Red = ColorTranslator.FromHtml("#E5173C");

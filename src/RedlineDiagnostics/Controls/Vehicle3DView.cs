@@ -224,7 +224,7 @@ namespace RedlineDiagnostics.Controls
                 path.AddEllipse(-vp.Width * 0.2f, -vp.Height * 0.3f, vp.Width * 1.4f, vp.Height * 1.8f);
                 using (var pgb = new PathGradientBrush(path))
                 {
-                    pgb.CenterColor = Color.FromArgb(22, 30, 58);
+                    pgb.CenterColor = Color.FromArgb(26, 20, 22); // faint warm glow behind the car
                     pgb.SurroundColors = new[] { Theme.Background };
                     g.FillRectangle(pgb, vp);
                 }

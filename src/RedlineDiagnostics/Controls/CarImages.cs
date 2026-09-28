@@ -18,7 +18,9 @@ namespace RedlineDiagnostics.Controls
         /// <summary>Small silver side three-quarter view (recent scan rows).</summary>
         Thumb,
         /// <summary>Red-lit side view for the navigation rail footer.</summary>
-        Nav
+        Nav,
+        /// <summary>Low front three-quarter view with red headlights (splash screen).</summary>
+        Splash
     }
 
     /// <summary>
@@ -100,7 +102,8 @@ namespace RedlineDiagnostics.Controls
             var style = new StudioStyle();
             float margin = 4f;
             float yAlign = 0.5f; // 0 = top, 1 = bottom placement of the fitted car
-            bool floor = true, headlights = false, taillights = false;
+            bool floor = true, headlights = false, taillights = false, bothHeadlights = false;
+            var headlightColor = Color.FromArgb(235, 245, 255);
             switch (shot)
             {
                 case CarShot.Hero:
@@ -123,6 +126,16 @@ namespace RedlineDiagnostics.Controls
                     style.RimColor = Color.FromArgb(180, 200, 230);
                     style.Rim = 0.5f; style.Bounce = 0.15f; style.Ambient = 0.45f;
                     floor = false;
+                    margin = 2f;
+                    break;
+                case CarShot.Splash:
+                    cam.Yaw = (float)(Math.PI / 2) - 0.45f; cam.Pitch = 0.07f; cam.FovDegrees = 30f; cam.Distance = 8.5f;
+                    style.Paint = Color.FromArgb(12, 12, 15);
+                    style.Rim = 0.8f; style.Bounce = 0.45f; style.Specular = 0.75f; style.Sky = 0.12f; style.Ambient = 0.18f;
+                    headlights = false; bothHeadlights = true; // the model's own lamp shapes read better than estimated glows
+                    headlightColor = Color.FromArgb(255, 36, 60);
+                    floor = false;
+                    yAlign = 1f;
                     margin = 2f;
                     break;
                 case CarShot.Nav:
@@ -186,8 +199,11 @@ namespace RedlineDiagnostics.Controls
                         SurfaceAt(mesh, true, y, h * 0.06f, out xs, out zs);
                         float z = zs * 0.72f;
                         var near = r.ToView(new Vec3(xs, y, z)).Z < r.ToView(new Vec3(xs, y, -z)).Z ? z : -z;
-                        float sign = Math.Sign(near);
-                        LightBar(g, r, new Vec3(xs - 0.1f, y, near + 0.12f * sign), new Vec3(xs - 0.02f, y + 0.02f, near - 0.2f * sign), Color.FromArgb(235, 245, 255), ss / s);
+                        foreach (var side in bothHeadlights ? new[] { near, -near } : new[] { near })
+                        {
+                            float sign = Math.Sign(side);
+                            LightBar(g, r, new Vec3(xs - 0.1f, y, side + 0.12f * sign), new Vec3(xs - 0.02f, y + 0.02f, side - 0.2f * sign), headlightColor, ss / s);
+                        }
                     }
                     if (taillights)
                     {

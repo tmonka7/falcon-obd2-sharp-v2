@@ -378,7 +378,7 @@ namespace RedlineDiagnostics.Forms.Pages
                 {
                     var oldClip = g.Clip;
                     g.SetClip(path);
-                    using (var b = new LinearGradientBrush(r, Color.FromArgb(34, 8, 16), Color.FromArgb(12, 13, 22), LinearGradientMode.Horizontal))
+                    using (var b = new LinearGradientBrush(r, Color.FromArgb(34, 8, 14), Color.FromArgb(10, 10, 11), LinearGradientMode.Horizontal))
                         g.FillRectangle(b, r);
                     // red studio floor glow
                     using (var gp = new GraphicsPath())
@@ -431,7 +431,7 @@ namespace RedlineDiagnostics.Forms.Pages
                 // vehicle info panel
                 var p = new RectangleF(Width - 192, 44, 178, 196);
                 using (var path = Theme.RoundedRect(p, 10))
-                using (var b = new SolidBrush(Color.FromArgb(185, 10, 12, 20)))
+                using (var b = new SolidBrush(Color.FromArgb(190, 8, 8, 9)))
                     g.FillPath(b, path);
                 Theme.DrawRounded(g, p, 10, Alpha(Color.White, 34));
 
@@ -622,7 +622,7 @@ namespace RedlineDiagnostics.Forms.Pages
                 var ringC = new PointF(88, 132);
                 float rad = 58;
                 var ringRect = new RectangleF(ringC.X - rad, ringC.Y - rad, rad * 2, rad * 2);
-                using (var pen = new Pen(Color.FromArgb(34, 40, 62), 10f)) g.DrawEllipse(pen, ringRect);
+                using (var pen = new Pen(Color.FromArgb(38, 38, 44), 10f)) g.DrawEllipse(pen, ringRect);
                 if (score.HasValue)
                 {
                     var col = score >= 90 ? Theme.Green : score >= 70 ? Theme.Red : Theme.RedBright;
@@ -808,7 +808,7 @@ namespace RedlineDiagnostics.Forms.Pages
 
                     var tb = new RectangleF(row.X + 8, row.Y + 5, 80, row.Height - 10);
                     using (var path = Theme.RoundedRect(tb, 6))
-                    using (var b = new LinearGradientBrush(RectangleF.Inflate(tb, 1, 1), Color.FromArgb(44, 50, 70), Color.FromArgb(22, 26, 40), LinearGradientMode.Vertical))
+                    using (var b = new LinearGradientBrush(RectangleF.Inflate(tb, 1, 1), Color.FromArgb(48, 48, 54), Color.FromArgb(20, 20, 23), LinearGradientMode.Vertical))
                         g.FillPath(b, path);
                     if (thumb != null) g.DrawImage(thumb, tb.X + 2, tb.Y + (tb.Height - 40) / 2, 76, 40);
 
@@ -854,7 +854,7 @@ namespace RedlineDiagnostics.Forms.Pages
                 _box = new TextBox
                 {
                     BorderStyle = BorderStyle.None,
-                    BackColor = Color.FromArgb(11, 14, 26),
+                    BackColor = Color.FromArgb(8, 8, 10),
                     ForeColor = Theme.Text,
                     Font = Theme.Font(10f),
                     Bounds = new Rectangle(44, 61, Width - 150, 20),
@@ -967,11 +967,11 @@ namespace RedlineDiagnostics.Forms.Pages
                 {
                     var oldClip = g.Clip;
                     g.SetClip(path);
-                    using (var b = new LinearGradientBrush(r, Color.FromArgb(22, 24, 38), Color.FromArgb(8, 8, 14), LinearGradientMode.Vertical))
+                    using (var b = new LinearGradientBrush(r, Color.FromArgb(20, 20, 23), Color.FromArgb(5, 5, 6), LinearGradientMode.Vertical))
                         g.FillRectangle(b, r);
                     // mountain ridges
-                    DrawRidge(g, 0.42f, 0.2f, 1.7f, Color.FromArgb(44, 46, 60), Color.FromArgb(20, 20, 30));
-                    DrawRidge(g, 0.52f, 0.14f, 2.9f, Color.FromArgb(28, 28, 40), Color.FromArgb(12, 12, 18));
+                    DrawRidge(g, 0.42f, 0.2f, 1.7f, Color.FromArgb(42, 42, 47), Color.FromArgb(18, 18, 21));
+                    DrawRidge(g, 0.52f, 0.14f, 2.9f, Color.FromArgb(26, 26, 30), Color.FromArgb(10, 10, 12));
                     // red horizon glow
                     using (var gp = new GraphicsPath())
                     {
@@ -981,7 +981,7 @@ namespace RedlineDiagnostics.Forms.Pages
                     }
                     // road
                     var road = new[] { new PointF(Width * 0.42f, Height * 0.66f), new PointF(Width * 0.58f, Height * 0.66f), new PointF(Width * 1.1f, Height), new PointF(-Width * 0.1f, Height) };
-                    using (var b = new LinearGradientBrush(new RectangleF(0, Height * 0.66f - 1, Width, Height * 0.34f + 2), Color.FromArgb(200, 14, 12, 18), Color.FromArgb(230, 6, 6, 10), LinearGradientMode.Vertical))
+                    using (var b = new LinearGradientBrush(new RectangleF(0, Height * 0.66f - 1, Width, Height * 0.34f + 2), Color.FromArgb(200, 12, 11, 12), Color.FromArgb(230, 5, 5, 6), LinearGradientMode.Vertical))
                         g.FillPolygon(b, road);
                     g.Clip = oldClip;
                 }

@@ -4,6 +4,8 @@ Full-screen (1366 × 768) OBD-II vehicle diagnostics workstation for Windows, bu
 **.NET Framework 4.7 / Windows Forms** with a self-contained software 3D renderer.
 The UI is available in **English, Japanese and Chinese** and can be switched live.
 
+![Splash screen](docs/screenshots/splash.png)
+
 ![Home dashboard](docs/screenshots/home.png)
 
 ![Full System Scan](docs/screenshots/scan.png)
@@ -12,6 +14,7 @@ The UI is available in **English, Japanese and Chinese** and can be switched liv
 
 | Area | What it does |
 | --- | --- |
+| **Splash screen** | Shown at start-up in the same full-screen mode as the app. Its progress bar follows the real start-up work: diagnostic database, 3D model (loaded and simplified in the background), and a check that the configured adapter's COM port exists. The loaded car is rendered in the garage scene with a wet-floor reflection, next to a wireframe of the same model. The language (English / 日本語 / 中文) can be chosen by tap and is saved. Minimum 3 s on screen. |
 | **Home dashboard** | Welcome card with the active vehicle, adapter card (device, link, firmware, active protocol family), health score ring with per-system status from the last scan, quick actions (scan, read / clear codes, live data, service functions), recent scans, DTC lookup with popular codes. The car pictures are rendered from the loaded 3D model with an opaque studio shader (smooth Blinn-Phong, red rim and floor bounce light, 2x supersampling) on a background thread. |
 | **Full System Scan** | Walks every control module (21 modules in the bundled catalog), probes it, identifies the ECU, samples its live channels and reads stored / pending / permanent trouble codes (SAE J1979 and UDS 19 02). Progress is visualised in 3D: glowing module markers, an animated CAN harness, a scanning sweep plane and floating callouts. |
 | **3D vehicle view** | Real car meshes (glTF/GLB or OBJ) rendered with GDI+: painter's algorithm, holographic fills, crease + silhouette outlines. 3D / 2D (top-down blueprint) / X-Ray modes, mouse orbit and zoom, auto-rotate, mini navigator. Dense models are simplified at load time with quadric edge collapse (213k → 7k triangles in about 3 s). A procedural sedan is the fallback when no model is available. |
@@ -82,6 +85,8 @@ RedlineDiagnostics.exe --autotest C:\temp\shots
 Runs an unattended session off-screen (simulator scan, language switch, view modes, report, live data,
 all pages) and writes a PNG of every step. Useful for visual regression checks.
 
+`--autotest-splash <dir>` captures the splash screen (start, loading, ready, JA, ZH) and exits;
+`--autotest-startup <dir>` runs the real start-up (splash, then main window) off-screen and captures the Home page.
 `--autotest-home <dir>` captures only the Home page in EN / JA / ZH (about 8 s), and `--render-cars <dir>` writes the
 Home page car renders (hero, rear, thumbnail, sidebar) as PNG files and exits.
 
